@@ -7,4 +7,3 @@
 ### Changed
 
 * Initial release
-

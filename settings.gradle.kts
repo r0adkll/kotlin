@@ -26,4 +26,5 @@ include(
   ":danger-kotlin-kts",
   ":danger-plugin-installer",
 )
+
 include(":intellij-plugin")

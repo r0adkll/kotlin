@@ -1,7 +1,7 @@
 name: Build Docker (Manual)
 
 on:
-  workflow_dispatch :
+  workflow_dispatch:
     inputs:
       docker-version:
         description: "Docker Version"
