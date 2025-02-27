@@ -6,7 +6,7 @@ object DangerKotlin {
   private const val FILE_TMP_OUTPUT_JSON = "danger_out.json"
 
   fun run() {
-    val dangerDSLPath = readLine()
+    val dangerDSLPath = readlnOrNull()
 
     if (dangerDSLPath != null) {
       Log.info("Got Danger DSL path $dangerDSLPath", true)

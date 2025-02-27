@@ -1,7 +1,8 @@
 [versions]
+clikt = "5.0.3"
 dokka = "2.0.0"
 junit = "4.12"
-kotlin = "2.0.21"
+kotlin = "2.1.10"
 kotlinx-serialization = "1.7.3"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
@@ -21,6 +22,7 @@ shadowJar = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
+clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-main-kts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref = "kotlin" }
 kotlin-script-runtime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }

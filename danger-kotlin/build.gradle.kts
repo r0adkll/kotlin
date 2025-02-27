@@ -28,7 +28,12 @@ kotlin {
   buildTarget.apply { binaries { executable() } }
 
   sourceSets {
-    val runnerMain by getting { dependencies { implementation(kotlin("stdlib-common")) } }
+    val runnerMain by getting {
+      dependencies {
+        implementation(kotlin("stdlib-common"))
+        implementation(libs.clikt)
+      }
+    }
     val runnerTest by getting {
       dependencies {
         implementation(kotlin("test-common"))
