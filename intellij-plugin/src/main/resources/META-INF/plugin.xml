@@ -16,7 +16,7 @@
   </extensions>
 
   <extensions defaultExtensionNs="org.jetbrains.kotlin">
-    <supportsKotlinPluginMode supportsK2="true"/>
+    <supportsKotlinPluginMode supportsK2="false"/>
     <scriptDefinitionsSource implementation="com.r0adkll.danger.DangerScriptDefinitionsSource"/>
   </extensions>
 </idea-plugin>

@@ -13,14 +13,14 @@ import com.r0adkll.danger.DangerScriptDefinitionsSource
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 import kotlin.script.experimental.host.ScriptingHostConfiguration
 import kotlin.script.experimental.jvm.defaultJvmScriptingHostConfiguration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.kotlin.idea.base.plugin.KotlinPluginModeProvider
 import org.jetbrains.kotlin.idea.core.script.ScriptDefinitionsManager
-import org.jetbrains.kotlin.idea.core.script.k2.K2ScriptDefinitionProvider
 import org.jetbrains.kotlin.idea.core.script.loadDefinitionsFromTemplatesByPaths
 import org.jetbrains.kotlin.idea.core.script.settings.KotlinScriptingSettings
 import org.jetbrains.kotlin.scripting.definitions.ScriptDefinition
@@ -45,54 +45,51 @@ class DangerService(private val project: Project) {
     logger.info("Loading Danger for $pluginVersion")
 
     // Configure the expected sourceJar path
-    //    val dangerKotlinJar = getDangerSourceJarPath(pluginVersion)
-    //    if (dangerKotlinJar.exists()) {
-    //      logger.info("danger-kotlin.jar found!")
-    //      dangerConfig = DangerConfig(dangerKotlinJar)
-    //      dangerScriptDefinition = scriptDefinition(dangerConfig!!)
-    //      reloadScriptDefinitions()
-    //    } else {
-    logger.warn("danger-kotlin.jar could not be found in this project, copy from plugin")
-    copyDangerJar(pluginVersion)
-    reloadScriptDefinitions()
-    //    }
+    val dangerKotlinJar = getDangerSourceJarPath(pluginVersion)
+    if (dangerKotlinJar.exists()) {
+      logger.info("danger-kotlin.jar found!")
+      dangerConfig = DangerConfig(dangerKotlinJar)
+      dangerScriptDefinition = scriptDefinition(dangerConfig!!)
+      reloadScriptDefinitions()
+    } else {
+      logger.warn("danger-kotlin.jar could not be found in this project, copy from plugin")
+      copyDangerJar(pluginVersion)
+      reloadScriptDefinitions()
+    }
   }
 
   private fun scriptDefinition(config: DangerConfig): ScriptDefinition? {
     return loadDefinitionsFromTemplatesByPaths(
-        templateClassNames = listOf(config.className),
-        templateClasspath = listOf(config.classPath),
-        baseHostConfiguration =
-          ScriptingHostConfiguration(defaultJvmScriptingHostConfiguration) {
-            getEnvironment {
-              mapOf(
-                "projectRoot" to (project.basePath ?: project.baseDir.canonicalPath)?.let(::File)
-              )
-            }
-          },
-      )
+      templateClassNames = listOf(config.className),
+      templateClasspath = listOf(config.classPath),
+      baseHostConfiguration =
+        ScriptingHostConfiguration(defaultJvmScriptingHostConfiguration) {
+          getEnvironment {
+            mapOf(
+                "projectRoot" to (project.basePath)?.let(::File),
+            )
+          }
+        },
+    )
       .firstOrNull()
   }
 
+  // TODO: Update this to support k2 mode at some point in the future
   private fun reloadScriptDefinitions() {
-    if (KotlinPluginModeProvider.isK2Mode()) {
-      K2ScriptDefinitionProvider.getInstance(project).reloadDefinitionsFromSources()
-    } else {
-      ScriptDefinitionsManager.getInstance(project).apply {
-        reloadDefinitionsBy(DangerScriptDefinitionsSource(project))
+    ScriptDefinitionsManager.getInstance(project).apply {
+      reloadDefinitionsBy(DangerScriptDefinitionsSource(project))
 
-        dangerScriptDefinition?.let { definition ->
-          KotlinScriptingSettings.getInstance(project).apply {
-            // Make sure the DF script def is first, or else it won't load
-            setOrder(definition, -100)
+      dangerScriptDefinition?.let { definition ->
+        KotlinScriptingSettings.getInstance(project).apply {
+          // Make sure the DF script def is first, or else it won't load
+          setOrder(definition, -100)
 
-            // Make sure auto-reload is on to automatically react to changes
-            setAutoReloadConfigurations(definition, true)
-          }
+          // Make sure auto-reload is on to automatically react to changes
+          setAutoReloadConfigurations(definition, true)
         }
-
-        reorderDefinitions()
       }
+
+      reorderDefinitions()
     }
   }
 
@@ -102,6 +99,7 @@ class DangerService(private val project: Project) {
         DangerService::class.java.classLoader.getResourceAsStream("jar/danger-kotlin.jar")
           ?: error("Error loading packaged jar")
 
+      getDangerSourceDirectory(version)?.createDirectories()
       val outputPath = getDangerSourceJarPath(version)
 
       packagedJar.copyTo(outputPath.outputStream())
@@ -112,13 +110,18 @@ class DangerService(private val project: Project) {
       dangerScriptDefinition = scriptDefinition(dangerConfig!!)
     }
 
-  private fun getDangerSourceJarPath(version: String): Path {
+  private fun getDangerSourceDirectory(version: String): Path? {
     return project.basePath
       ?.toNioPathOrNull()
       ?.resolve(DANGER_PROJECT_DIR)
       ?.resolve(DANGER_SOURCE_DIR)
       ?.resolve(version)
-      ?.resolve(DANGER_SOURCE_JAR_NAME) ?: error("Unable to resolve danger source jar file path")
+  }
+
+  private fun getDangerSourceJarPath(version: String): Path {
+    return getDangerSourceDirectory(version)
+      ?.resolve(DANGER_SOURCE_JAR_NAME)
+      ?: error("Unable to resolve danger source jar file path")
   }
 }
 
