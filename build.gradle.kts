@@ -3,5 +3,3 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.shadowJar) apply false
 }
-
-apply from: file('secrets.gradle')

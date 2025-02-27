@@ -12,15 +12,15 @@ plugins {
 }
 
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenCentral()
-        maven { url = "https://kotlin.bintray.com/kotlinx/" }
         mavenLocal()
     }
 }
 
-include ':danger-kotlin'
-include ':danger-kotlin-library'
-include ':danger-kotlin-sdk'
-include ':danger-kotlin-kts'
-include ':danger-plugin-installer'
+include(":danger-kotlin")
+include(":danger-kotlin-library")
+include(":danger-kotlin-sdk")
+include(":danger-kotlin-kts")
+include(":danger-plugin-installer")
