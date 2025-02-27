@@ -40,9 +40,8 @@ object DangerFile : DangerFileBridge {
 
     Log.info("Compiling Dangerfile $dangerfile", true)
 
-    Cmd()
-      .name("kotlinc")
-      .args(
+    exec("kotlinc") {
+      arguments(
         "-script-templates",
         "systems.danger.kts.DangerFileScript",
         "-cp",
@@ -52,7 +51,7 @@ object DangerFile : DangerFileBridge {
         inputJson,
         outputJson,
       )
-      .exec()
+    }
   }
 }
 

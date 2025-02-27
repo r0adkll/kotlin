@@ -3,22 +3,17 @@ package systems.danger.cmd
 import platform.posix.*
 import systems.danger.Log
 
-class Cmd {
-  private lateinit var name: String
-  private lateinit var args: Array<out String>
+class Cmd internal constructor(private val name: String) {
+  var arguments: Array<out String> = emptyArray()
 
-  fun name(name: String) = apply { this.name = name }
-
-  fun args(vararg args: String) = apply { this.args = args }
-
-  fun exec() {
-    exec(true)
+  fun arguments(vararg arg: String) {
+    arguments = arg
   }
 
-  private fun exec(printCallLog: Boolean) {
-    "$name ${args.joinToString(" ")}"
+  internal fun exec(verbose: Boolean) {
+    "$name ${arguments.joinToString(" ")}"
       .apply {
-        if (printCallLog) {
+        if (verbose) {
           Log.info("Executing $this - pid ${getpid()}")
         }
       }
@@ -30,4 +25,9 @@ class Cmd {
         }
       }
   }
+}
+
+fun exec(name: String, verbose: Boolean = false, builder: Cmd.() -> Unit) {
+  val cmd = Cmd(name).apply(builder)
+  cmd.exec(verbose)
 }
