@@ -4,6 +4,7 @@ import kotlinx.serialization.*
 
 /**
  * The BitBucket server data for your pull request.
+ *
  * @property metadata The pull request and repository metadata
  * @property pullRequest The pull request metadata
  * @property commits The commits associated with the pull request
@@ -12,40 +13,37 @@ import kotlinx.serialization.*
  */
 @Serializable
 data class BitBucketServer(
-    val metadata: BitBucketMetadata,
-    @SerialName("pr")
-    val pullRequest: BitBucketServerPR,
-    val commits: List<BitBucketServerCommit>,
-    val comments: List<BitBucketServerComment>,
-    val activities: List<BitBucketServerActivity>
+  val metadata: BitBucketMetadata,
+  @SerialName("pr") val pullRequest: BitBucketServerPR,
+  val commits: List<BitBucketServerCommit>,
+  val comments: List<BitBucketServerComment>,
+  val activities: List<BitBucketServerActivity>,
 )
 
 /**
  * Defines and activity such as OPENING, CLOSING, MERGING or UPDATING a pull request
+ *
  * @property id The activity's ID
  * @property createdAt Date activity created as number of milli seconds since the unix epoch
  * @property user The user that triggered the activity.
  * @property action The action the activity describes (e.g. "COMMENTED").
- * @property commentAction In case the action was "COMMENTED" it will state the command specific action (e.g. "CREATED").
+ * @property commentAction In case the action was "COMMENTED" it will state the command specific
+ *   action (e.g. "CREATED").
  */
 @Serializable
 data class BitBucketServerActivity(
-    val id: Int,
-    @SerialName("createdDate")
-    val createdAt: Long,
-    val user: BitBucketServerUser,
-    val action: String,
-    val commentAction: String? = null
+  val id: Int,
+  @SerialName("createdDate") val createdAt: Long,
+  val user: BitBucketServerUser,
+  val action: String,
+  val commentAction: String? = null,
 )
 
-@Serializable
-internal data class BitBucketServerEnv(
-    val pr: String,
-    val repo: String
-)
+@Serializable internal data class BitBucketServerEnv(val pr: String, val repo: String)
 
 /**
  * A comment on the pull request
+ *
  * @property id The comment's id.
  * @property createdAt Date comment created as number of mili seconds since the unix epoch.
  * @property user The comment's author.
@@ -59,21 +57,21 @@ internal data class BitBucketServerEnv(
  */
 @Serializable
 data class BitBucketServerComment(
-    val id: Int,
-    @SerialName("createdDate")
-    val createdAt: Long,
-    val user: BitBucketServerUser,
-    val action: String,
-    val fromHash: String? = null,
-    val previousFromHash: String? = null,
-    val toHash: String? = null,
-    val previousToHash: String? = null,
-    val commentAction: String? = null,
-    val comment: BitBucketServerCommentDetail? = null
+  val id: Int,
+  @SerialName("createdDate") val createdAt: Long,
+  val user: BitBucketServerUser,
+  val action: String,
+  val fromHash: String? = null,
+  val previousFromHash: String? = null,
+  val toHash: String? = null,
+  val previousToHash: String? = null,
+  val commentAction: String? = null,
+  val comment: BitBucketServerCommentDetail? = null,
 )
 
 /**
  * Detailed data of the comment.
+ *
  * @property id The comment's id.
  * @property version The comment's version.
  * @property text The comment content.
@@ -84,24 +82,22 @@ data class BitBucketServerComment(
  * @property properties Properties associated with the comment
  * @property tasks Tasks associated with the comment
  */
-
 @Serializable
 data class BitBucketServerCommentDetail(
-    val id: Int,
-    val version: Int,
-    val text: String,
-    val author: BitBucketServerUser? = null,
-    @SerialName("createdDate")
-    val createdAt: Long,
-    @SerialName("updatedDate")
-    val updatedAt: Long,
-    val comments: List<BitBucketServerCommentDetail>? = null,
-    val properties: BitBucketServerCommentInnerProperties? = null,
-    val tasks: List<BitBucketServerCommentTask>? = null
+  val id: Int,
+  val version: Int,
+  val text: String,
+  val author: BitBucketServerUser? = null,
+  @SerialName("createdDate") val createdAt: Long,
+  @SerialName("updatedDate") val updatedAt: Long,
+  val comments: List<BitBucketServerCommentDetail>? = null,
+  val properties: BitBucketServerCommentInnerProperties? = null,
+  val tasks: List<BitBucketServerCommentTask>? = null,
 )
 
 /**
  * Task associated with a comment
+ *
  * @property id The tasks ID
  * @property createdAt Date activity created as number of milliseconds since the unix epoch
  * @property text The text of the task
@@ -110,61 +106,61 @@ data class BitBucketServerCommentDetail(
  */
 @Serializable
 data class BitBucketServerCommentTask(
-    val id: Int,
-    @SerialName("createdDate")
-    val createdAt: Long,
-    val text: String,
-    val state: String,
-    val author: BitBucketServerUser? = null,
+  val id: Int,
+  @SerialName("createdDate") val createdAt: Long,
+  val text: String,
+  val state: String,
+  val author: BitBucketServerUser? = null,
 )
 
 /**
  * Properties associated with a comment
+ *
  * @property repositoryId The ID of the repo
  * @property issues Slugs of linkd Jira issues
  */
 @Serializable
 data class BitBucketServerCommentInnerProperties(
-    val repositoryId: Int,
-    val issues: List<String> = listOf()
+  val repositoryId: Int,
+  val issues: List<String> = listOf(),
 )
 
 /**
  * A BitBucket server commit
+ *
  * @property id The SHA for the commit.
  * @property displayId The shortened SHA for the commit.
  * @property author The author of the commit, assumed to be the person who wrote the code.
  * @property authorTimestamp The UNIX timestamp for when the commit was authored.
- * @property committer The author of the commit, assumed to be the person who commited/merged the code into a project.
+ * @property committer The author of the commit, assumed to be the person who commited/merged the
+ *   code into a project.
  * @property committerTimestamp When the commit was commited to the project
  * @property message The commit's message
  * @property parents The commit's parents
  */
 @Serializable
 data class BitBucketServerCommit(
-    val id: String,
-    val displayId: String,
-    val author: BitBucketServerUser? = null,
-    val authorTimestamp: Long,
-    val committer: BitBucketServerUser? = null,
-    val committerTimestamp: Long,
-    val message: String,
-    val parents: List<BitBucketServerCommitParent>
+  val id: String,
+  val displayId: String,
+  val author: BitBucketServerUser? = null,
+  val authorTimestamp: Long,
+  val committer: BitBucketServerUser? = null,
+  val committerTimestamp: Long,
+  val message: String,
+  val parents: List<BitBucketServerCommitParent>,
 )
 
 /**
  * A commit's parent
+ *
  * @property id The SHA for the commit
  * @property displayId The shortened SHA for the commit
  */
-@Serializable
-data class BitBucketServerCommitParent(
-    val id: String,
-    val displayId: String
-)
+@Serializable data class BitBucketServerCommitParent(val id: String, val displayId: String)
 
 /**
  * The BitBucketServer PR data
+ *
  * @property id The PR's ID.
  * @property version The API version.
  * @property title Title of the pull request.
@@ -183,51 +179,50 @@ data class BitBucketServerCommitParent(
  */
 @Serializable
 data class BitBucketServerPR(
-    val id: Int,
-    val version: Int,
-    val title: String,
-    val description: String? = null,
-    val state: State,
-    val open: Boolean,
-    val closed: Boolean,
-    @SerialName("createdDate")
-    val createdAt: Long,
-    @SerialName("updatedDate")
-    val updatedAt: Long,
-    val fromRef: BitBucketServerMergeRef,
-    val toRef: BitBucketServerMergeRef,
-    @SerialName("locked")
-    val isLocked: Boolean,
-    val author: BitBucketServerParticipant? = null,
-    val reviewers: List<BitBucketServerReviewer>? = null,
-    val participants: List<BitBucketServerParticipant>? = null
+  val id: Int,
+  val version: Int,
+  val title: String,
+  val description: String? = null,
+  val state: State,
+  val open: Boolean,
+  val closed: Boolean,
+  @SerialName("createdDate") val createdAt: Long,
+  @SerialName("updatedDate") val updatedAt: Long,
+  val fromRef: BitBucketServerMergeRef,
+  val toRef: BitBucketServerMergeRef,
+  @SerialName("locked") val isLocked: Boolean,
+  val author: BitBucketServerParticipant? = null,
+  val reviewers: List<BitBucketServerReviewer>? = null,
+  val participants: List<BitBucketServerParticipant>? = null,
 ) {
-    @Serializable
-    enum class State {
-        OPEN, MERGED, SUPERSEDED, DECLINED
-    }
+  @Serializable
+  enum class State {
+    OPEN,
+    MERGED,
+    SUPERSEDED,
+    DECLINED,
+  }
 }
 
-@Serializable
-data class BitBucketServerParticipant(
-    val user: BitBucketServerUser
-)
+@Serializable data class BitBucketServerParticipant(val user: BitBucketServerUser)
 
 /**
  * The BitBucketServer PR data
+ *
  * @property user The BitBucket Server user.
  * @property approved The approval status.
  * @property lastReviewedCommit The commit SHA for the latest commit that was reviewed.
  */
 @Serializable
 data class BitBucketServerReviewer(
-    val user: BitBucketServerUser,
-    val approved: Boolean,
-    val lastReviewedCommit: String? = null
+  val user: BitBucketServerUser,
+  val approved: Boolean,
+  val lastReviewedCommit: String? = null,
 )
 
 /**
  * A BitBucketServer branch reference
+ *
  * @property id The branch name
  * @property displayId The human readable branch name
  * @property latestCommit The SHA for the latest commit
@@ -235,14 +230,15 @@ data class BitBucketServerReviewer(
  */
 @Serializable
 data class BitBucketServerMergeRef(
-    val id: String,
-    val displayId: String,
-    val latestCommit: String,
-    val repository: BitBucketServerRepo
+  val id: String,
+  val displayId: String,
+  val latestCommit: String,
+  val repository: BitBucketServerRepo,
 )
 
 /**
  * The repository associated to a commit
+ *
  * @property name The repo name
  * @property slug The slug for the repo
  * @property scmId The type of SCM tool, probably "git"
@@ -252,18 +248,17 @@ data class BitBucketServerMergeRef(
  */
 @Serializable
 data class BitBucketServerRepo(
-    val name: String? = null,
-    val slug: String,
-    val scmId: String,
-    @SerialName("public")
-    val isPublic: Boolean,
-    @SerialName("forkable")
-    val isForkable: Boolean,
-    val project: BitBucketServerProject
+  val name: String? = null,
+  val slug: String,
+  val scmId: String,
+  @SerialName("public") val isPublic: Boolean,
+  @SerialName("forkable") val isForkable: Boolean,
+  val project: BitBucketServerProject,
 )
 
 /**
  * An abtraction for grouping repos
+ *
  * @property id The project unique id.
  * @property key The project's human readable project key.
  * @property name The name of the project.
@@ -272,16 +267,16 @@ data class BitBucketServerRepo(
  */
 @Serializable
 data class BitBucketServerProject(
-    val id: Int,
-    val key: String,
-    val name: String,
-    @SerialName("public")
-    val isPublic: Boolean,
-    val type: String
+  val id: Int,
+  val key: String,
+  val name: String,
+  @SerialName("public") val isPublic: Boolean,
+  val type: String,
 )
 
 /**
  * The BitBucket Server user
+ *
  * @property id The unique user ID
  * @property name The name of the user
  * @property displayName The name to use when referencing the user
@@ -292,16 +287,17 @@ data class BitBucketServerProject(
  */
 @Serializable
 data class BitBucketServerUser(
-    val id: Int? = null,
-    val name: String? = null,
-    val displayName: String? = null,
-    val emailAddress: String? = null,
-    val active: Boolean = false,
-    val slug: String? = null,
-    val type: Type = Type.NORMAL
+  val id: Int? = null,
+  val name: String? = null,
+  val displayName: String? = null,
+  val emailAddress: String? = null,
+  val active: Boolean = false,
+  val slug: String? = null,
+  val type: Type = Type.NORMAL,
 ) {
-    @Serializable
-    enum class Type {
-        NORMAL, SERVICE
-    }
+  @Serializable
+  enum class Type {
+    NORMAL,
+    SERVICE,
+  }
 }

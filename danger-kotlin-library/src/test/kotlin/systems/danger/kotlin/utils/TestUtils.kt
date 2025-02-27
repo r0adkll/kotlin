@@ -4,44 +4,36 @@ import kotlinx.serialization.json.Json
 
 object TestUtils {
 
-    val Json: Json by lazy {
-        Json {
-            isLenient = true
-            ignoreUnknownKeys = true
-        }
+  val Json: Json by lazy {
+    Json {
+      isLenient = true
+      ignoreUnknownKeys = true
+    }
+  }
+
+  object JSONFiles {
+    val githubDangerJSON by lazy { loadJSON("githubDangerJSON.json") }
+
+    val githubWithSomeNullsAttributeDangerJSON by lazy {
+      loadJSON("githubWithSomeNullsAttributeDangerJSON.json")
     }
 
-    object JSONFiles {
-        val githubDangerJSON by lazy {
-            loadJSON("githubDangerJSON.json")
-        }
-
-        val githubWithSomeNullsAttributeDangerJSON by lazy {
-            loadJSON("githubWithSomeNullsAttributeDangerJSON.json")
-        }
-
-        val githubWithClosedMilestoneDangerJSON by lazy {
-            loadJSON("githubWithClosedMilestoneDangerJSON.json")
-        }
-
-        val dangerBitBucketServerJSON by lazy {
-            loadJSON("bitbucketServerDangerJSON.json")
-        }
-
-        val dangerBitBucketCloudJSON by lazy {
-            loadJSON("bitbucketCloudDangerJSON.json")
-        }
-
-        val gitlabJSON by lazy {
-            loadJSON("gitlabDangerJSON.json")
-        }
-
-        val gitlabWithCancelledPipelineJSON by lazy {
-            loadJSON("gitlabWithCancelledPipelineDangerJSON.json")
-        }
-
-        private fun loadJSON(named: String): String {
-            return this.javaClass.classLoader.getResource(named).readText()
-        }
+    val githubWithClosedMilestoneDangerJSON by lazy {
+      loadJSON("githubWithClosedMilestoneDangerJSON.json")
     }
+
+    val dangerBitBucketServerJSON by lazy { loadJSON("bitbucketServerDangerJSON.json") }
+
+    val dangerBitBucketCloudJSON by lazy { loadJSON("bitbucketCloudDangerJSON.json") }
+
+    val gitlabJSON by lazy { loadJSON("gitlabDangerJSON.json") }
+
+    val gitlabWithCancelledPipelineJSON by lazy {
+      loadJSON("gitlabWithCancelledPipelineDangerJSON.json")
+    }
+
+    private fun loadJSON(named: String): String {
+      return this.javaClass.classLoader.getResource(named).readText()
+    }
+  }
 }

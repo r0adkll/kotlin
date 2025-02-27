@@ -10,8 +10,7 @@ import systems.danger.kotlin.models.gitlab.GitLab
 // extensions over [DangerDSL] object
 
 /**
- * Execute the block only if danger is running on GitHub
- * Example code:
+ * Execute the block only if danger is running on GitHub Example code:
  * ```
  * danger(args) {
  *     onGitHub {
@@ -24,14 +23,13 @@ import systems.danger.kotlin.models.gitlab.GitLab
  * @receiver the [GitHub] descriptor
  */
 inline fun DangerDSL.onGitHub(onGitHub: GitHub.() -> Unit) {
-    if (this.onGitHub) {
-        github.run(onGitHub)
-    }
+  if (this.onGitHub) {
+    github.run(onGitHub)
+  }
 }
 
 /**
- * Execute the block only if danger is running on GitLab
- * Example code:
+ * Execute the block only if danger is running on GitLab Example code:
  * ```
  * danger(args) {
  *     onGitLab {
@@ -44,14 +42,13 @@ inline fun DangerDSL.onGitHub(onGitHub: GitHub.() -> Unit) {
  * @receiver the [GitLab] descriptor
  */
 inline fun DangerDSL.onGitLab(onGitLab: GitLab.() -> Unit) {
-    if (this.onGitLab) {
-        gitlab.run(onGitLab)
-    }
+  if (this.onGitLab) {
+    gitlab.run(onGitLab)
+  }
 }
 
 /**
- * Execute the block only if danger is running on BitBucket
- * Example code:
+ * Execute the block only if danger is running on BitBucket Example code:
  * ```
  * danger(args) {
  *     onBitBucket {
@@ -64,14 +61,13 @@ inline fun DangerDSL.onGitLab(onGitLab: GitLab.() -> Unit) {
  * @receiver the [BitBucketServer] descriptor
  */
 inline fun DangerDSL.onBitBucket(onBitBucket: BitBucketServer.() -> Unit) {
-    if (this.onBitBucketServer) {
-        bitBucketServer.run(onBitBucket)
-    }
+  if (this.onBitBucketServer) {
+    bitBucketServer.run(onBitBucket)
+  }
 }
 
 /**
- * Execute the block only if danger is running on BitBucketCloud
- * Example code:
+ * Execute the block only if danger is running on BitBucketCloud Example code:
  * ```
  * danger(args) {
  *     onBitBucketCloud {
@@ -84,14 +80,13 @@ inline fun DangerDSL.onBitBucket(onBitBucket: BitBucketServer.() -> Unit) {
  * @receiver the [BitBucketCloud] descriptor
  */
 inline fun DangerDSL.onBitBucketCloud(onBitBucket: BitBucketCloud.() -> Unit) {
-    if (this.onBitBucketCloud) {
-        bitBucketCloud.run(onBitBucket)
-    }
+  if (this.onBitBucketCloud) {
+    bitBucketCloud.run(onBitBucket)
+  }
 }
 
 /**
- * Execute a [Git] block
- * Example code:
+ * Execute a [Git] block Example code:
  * ```
  * danger(args) {
  *     onGit {
@@ -104,5 +99,5 @@ inline fun DangerDSL.onBitBucketCloud(onBitBucket: BitBucketCloud.() -> Unit) {
  * @receiver the [Git] descriptor
  */
 inline fun DangerDSL.onGit(onGit: Git.() -> Unit) {
-    git.run(onGit)
+  git.run(onGit)
 }

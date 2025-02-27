@@ -3,35 +3,26 @@
 package systems.danger.kotlin.models.github
 
 import kotlinx.datetime.Instant
-import systems.danger.kotlin.models.serializers.DateSerializer
 import kotlinx.serialization.*
 import systems.danger.kotlin.models.git.GitCommit
+import systems.danger.kotlin.models.serializers.DateSerializer
 
-/**
- * The GitHub metadata for your pull request.
- */
+/** The GitHub metadata for your pull request. */
 @Serializable
 data class GitHub(
-    val issue: GitHubIssue,
-    @SerialName("pr") val pullRequest: GitHubPR,
-    val commits: List<GitHubCommit>,
-    val reviews: List<GitHubReview>,
-    @SerialName("requested_reviewers") val requestedReviewers: GitHubRequestedReviewers
+  val issue: GitHubIssue,
+  @SerialName("pr") val pullRequest: GitHubPR,
+  val commits: List<GitHubCommit>,
+  val reviews: List<GitHubReview>,
+  @SerialName("requested_reviewers") val requestedReviewers: GitHubRequestedReviewers,
 )
 
 @Serializable
 enum class GitHubPullRequestState {
-    @SerialName("closed")
-    CLOSED,
-
-    @SerialName("open")
-    OPEN,
-
-    @SerialName("merged")
-    MERGED,
-
-    @SerialName("locked")
-    LOCKED
+  @SerialName("closed") CLOSED,
+  @SerialName("open") OPEN,
+  @SerialName("merged") MERGED,
+  @SerialName("locked") LOCKED,
 }
 
 /**
@@ -63,30 +54,30 @@ enum class GitHubPullRequestState {
  */
 @Serializable
 data class GitHubPR(
-    val number: Int,
-    val title: String,
-    val body: String? = null,
-    val user: GitHubUser,
-    val assignee: GitHubUser? = null,
-    val assignees: List<GitHubUser>,
-    @SerialName("created_at") val createdAt: Instant,
-    @SerialName("updated_at") val updatedAt: Instant,
-    @SerialName("closed_at") val closedAt: Instant? = null,
-    @SerialName("merged_at") val mergedAt: Instant? = null,
-    val head: GitHubMergeRef,
-    val base: GitHubMergeRef,
-    val state: GitHubPullRequestState,
-    @SerialName("draft") val isDraft: Boolean,
-    @SerialName("locked") val isLocked: Boolean,
-    @SerialName("merged") val isMerged: Boolean? = null,
-    @SerialName("commits") val commitCount: Int? = null,
-    @SerialName("comments") val commentCount: Int? = null,
-    @SerialName("review_comments") val reviewCommentCount: Int? = null,
-    val additions: Int? = null,
-    val deletions: Int? = null,
-    @SerialName("changed_files") val changedFiles: Int? = null,
-    val milestone: GitHubMilestone? = null,
-    @SerialName("html_url") val htmlURL: String
+  val number: Int,
+  val title: String,
+  val body: String? = null,
+  val user: GitHubUser,
+  val assignee: GitHubUser? = null,
+  val assignees: List<GitHubUser>,
+  @SerialName("created_at") val createdAt: Instant,
+  @SerialName("updated_at") val updatedAt: Instant,
+  @SerialName("closed_at") val closedAt: Instant? = null,
+  @SerialName("merged_at") val mergedAt: Instant? = null,
+  val head: GitHubMergeRef,
+  val base: GitHubMergeRef,
+  val state: GitHubPullRequestState,
+  @SerialName("draft") val isDraft: Boolean,
+  @SerialName("locked") val isLocked: Boolean,
+  @SerialName("merged") val isMerged: Boolean? = null,
+  @SerialName("commits") val commitCount: Int? = null,
+  @SerialName("comments") val commentCount: Int? = null,
+  @SerialName("review_comments") val reviewCommentCount: Int? = null,
+  val additions: Int? = null,
+  val deletions: Int? = null,
+  @SerialName("changed_files") val changedFiles: Int? = null,
+  val milestone: GitHubMilestone? = null,
+  @SerialName("html_url") val htmlURL: String,
 )
 
 /**
@@ -95,11 +86,7 @@ data class GitHubPR(
  * @property id The UUID for the team.
  * @property name The team name.
  */
-@Serializable
-data class GitHubTeam(
-    val id: Long,
-    val name: String
-)
+@Serializable data class GitHubTeam(val id: Long, val name: String)
 
 /**
  * Represents the payload for a PR's requested reviewers value.
@@ -108,10 +95,7 @@ data class GitHubTeam(
  * @property teams The list of teams of whom a review has been requested.
  */
 @Serializable
-data class GitHubRequestedReviewers(
-    val users: List<GitHubUser>,
-    val teams: List<GitHubTeam>
-)
+data class GitHubRequestedReviewers(val users: List<GitHubUser>, val teams: List<GitHubTeam>)
 
 /**
  * Represents a branch in PR
@@ -124,15 +108,15 @@ data class GitHubRequestedReviewers(
  */
 @Serializable
 data class GitHubMergeRef(
-    val label: String,
-    val ref: String,
-    val sha: String,
-    val user: GitHubUser,
-    val repo: GitHubRepo
+  val label: String,
+  val ref: String,
+  val sha: String,
+  val user: GitHubUser,
+  val repo: GitHubRepo,
 )
 
 /**
- *  Represents the payload for a repo.
+ * Represents the payload for a repo.
  *
  * @property id Generic UUID.
  * @property name The name of the repo, e.g. "danger-swift".
@@ -144,26 +128,22 @@ data class GitHubMergeRef(
  */
 @Serializable
 data class GitHubRepo(
-    val id: Long,
-    val name: String,
-    @SerialName("full_name")
-    val fullName: String,
-    @SerialName("private")
-    val isPrivate: Boolean,
-    val description: String? = null,
-    @SerialName("fork")
-    val isFork: Boolean,
-    @SerialName("html_url")
-    val htmlURL: String
+  val id: Long,
+  val name: String,
+  @SerialName("full_name") val fullName: String,
+  @SerialName("private") val isPrivate: Boolean,
+  val description: String? = null,
+  @SerialName("fork") val isFork: Boolean,
+  @SerialName("html_url") val htmlURL: String,
 )
 
 @Serializable
 enum class GitHubReviewState {
-    APPROVED,
-    CHANGES_REQUESTED,
-    COMMENTED,
-    PENDING,
-    DISMISSED
+  APPROVED,
+  CHANGES_REQUESTED,
+  COMMENTED,
+  PENDING,
+  DISMISSED,
 }
 
 /**
@@ -177,12 +157,11 @@ enum class GitHubReviewState {
  */
 @Serializable
 data class GitHubReview(
-    val user: GitHubUser,
-    val id: Long? = null,
-    val body: String? = null,
-    @SerialName("commit_id")
-    val commitId: String? = null,
-    val state: GitHubReviewState? = null
+  val user: GitHubUser,
+  val id: Long? = null,
+  val body: String? = null,
+  @SerialName("commit_id") val commitId: String? = null,
+  val state: GitHubReviewState? = null,
 )
 
 /**
@@ -196,23 +175,18 @@ data class GitHubReview(
  */
 @Serializable
 data class GitHubCommit(
-    val sha: String,
-    val url: String,
-    val author: GitHubUser? = null,
-    val commit: GitCommit,
-    val committer: GitHubUser? = null
+  val sha: String,
+  val url: String,
+  val author: GitHubUser? = null,
+  val commit: GitCommit,
+  val committer: GitHubUser? = null,
 )
 
 @Serializable
 enum class GitHubIssueState {
-    @SerialName("closed")
-    CLOSED,
-
-    @SerialName("open")
-    OPEN,
-
-    @SerialName("locked")
-    LOCKED
+  @SerialName("closed") CLOSED,
+  @SerialName("open") OPEN,
+  @SerialName("locked") LOCKED,
 }
 
 /**
@@ -243,21 +217,21 @@ enum class GitHubIssueState {
  */
 @Serializable
 data class GitHubIssue(
-    val id: Long,
-    val number: Int,
-    val title: String,
-    val user: GitHubUser,
-    val state: GitHubIssueState,
-    @SerialName("locked") val isLocked: Boolean,
-    val body: String? = null,
-    @SerialName("comments") val commentCount: Int,
-    val assignee: GitHubUser? = null,
-    val assignees: List<GitHubUser>,
-    val milestone: GitHubMilestone? = null,
-    @SerialName("created_at") val createdAt: Instant,
-    @SerialName("updated_at") val updatedAt: Instant,
-    @SerialName("closed_at") val closedAt: Instant? = null,
-    val labels: List<GitHubIssueLabel>
+  val id: Long,
+  val number: Int,
+  val title: String,
+  val user: GitHubUser,
+  val state: GitHubIssueState,
+  @SerialName("locked") val isLocked: Boolean,
+  val body: String? = null,
+  @SerialName("comments") val commentCount: Int,
+  val assignee: GitHubUser? = null,
+  val assignees: List<GitHubUser>,
+  val milestone: GitHubMilestone? = null,
+  @SerialName("created_at") val createdAt: Instant,
+  @SerialName("updated_at") val updatedAt: Instant,
+  @SerialName("closed_at") val closedAt: Instant? = null,
+  val labels: List<GitHubIssueLabel>,
 )
 
 /**
@@ -267,23 +241,13 @@ data class GitHubIssue(
  * @property color TThe color associated with this label.
  */
 @Serializable
-data class GitHubIssueLabel(
-    val id: Long,
-    val url: String,
-    val name: String,
-    val color: String
-)
+data class GitHubIssueLabel(val id: Long, val url: String, val name: String, val color: String)
 
 @Serializable
 enum class GitHubUserType {
-    @SerialName("User")
-    USER,
-
-    @SerialName("Organization")
-    ORGANIZATION,
-
-    @SerialName("Bot")
-    BOT
+  @SerialName("User") USER,
+  @SerialName("Organization") ORGANIZATION,
+  @SerialName("Bot") BOT,
 }
 
 /**
@@ -295,23 +259,17 @@ enum class GitHubUserType {
  */
 @Serializable
 data class GitHubUser(
-    val id: Long? = null,
-    val login: String? = null,
-    val type: GitHubUserType? = null,
-    @SerialName("avatar_url")
-    val avatarUrl: String? = null
+  val id: Long? = null,
+  val login: String? = null,
+  val type: GitHubUserType? = null,
+  @SerialName("avatar_url") val avatarUrl: String? = null,
 )
 
 @Serializable
 enum class GitHubMilestoneState {
-    @SerialName("closed")
-    CLOSED,
-
-    @SerialName("open")
-    OPEN,
-
-    @SerialName("all")
-    ALL
+  @SerialName("closed") CLOSED,
+  @SerialName("open") OPEN,
+  @SerialName("all") ALL,
 }
 
 /**
@@ -325,23 +283,23 @@ enum class GitHubMilestoneState {
  * @property creator The user who created this milestone.
  * @property openIssues The number of open issues in this milestone.
  * @property closedIssues The number of closed issues in this milestone.
- * @property createdAt The date  for when this milestone was created.
+ * @property createdAt The date for when this milestone was created.
  * @property updatedAt The date for when the milestone was update.
  * @property closedAt The date for when the milestone was closed.
  * @property dueOn The date for the due of this milestone.
  */
 @Serializable
 data class GitHubMilestone(
-    val id: Long,
-    val number: Int,
-    val state: GitHubMilestoneState,
-    val title: String,
-    val description: String? = null,
-    val creator: GitHubUser,
-    @SerialName("open_issues") val openIssues: Int,
-    @SerialName("closed_issues") val closedIssues: Int,
-    @SerialName("created_at") val createdAt: Instant,
-    @SerialName("updated_at") val updatedAt: Instant,
-    @SerialName("closed_at") val closedAt: Instant? = null,
-    @SerialName("due_on") val dueOn: Instant? = null
+  val id: Long,
+  val number: Int,
+  val state: GitHubMilestoneState,
+  val title: String,
+  val description: String? = null,
+  val creator: GitHubUser,
+  @SerialName("open_issues") val openIssues: Int,
+  @SerialName("closed_issues") val closedIssues: Int,
+  @SerialName("created_at") val createdAt: Instant,
+  @SerialName("updated_at") val updatedAt: Instant,
+  @SerialName("closed_at") val closedAt: Instant? = null,
+  @SerialName("due_on") val dueOn: Instant? = null,
 )

@@ -6,61 +6,49 @@ import systems.danger.kotlin.tools.shell.ShellExecutorFactory
 
 // extensions over [Git] object
 
-/**
- * Changed lines in this PR
- */
+/** Changed lines in this PR */
 val Git.changedLines: PullRequestChangedLines
-    get() {
-        if (headSha == null || baseSha == null) return PullRequestChangedLines(0, 0)
-        val shellExecutor = ShellExecutorFactory.get()
-        val commandRawOutput = shellExecutor.execute("git diff --numstat $baseSha $headSha")
-        val additionDeletionPairs = commandRawOutput.lines()
-            .filter { it.isNotEmpty() }
-            .map { line ->
-                val parts = line.split("\\s+".toRegex())
-                (parts[0].toIntOrNull() ?: 0) to (parts[1].toIntOrNull() ?: 0)
-            }
-        val additions = additionDeletionPairs.fold(0) { acc, (addition, _) -> acc + addition }
-        val deletions = additionDeletionPairs.fold(0) { acc, (_, deletion) -> acc + deletion }
-        val commandRawDiffOutput = shellExecutor.execute("git diff $baseSha $headSha")
-        return PullRequestChangedLines(additions, deletions, commandRawDiffOutput)
-    }
+  get() {
+    if (headSha == null || baseSha == null) return PullRequestChangedLines(0, 0)
+    val shellExecutor = ShellExecutorFactory.get()
+    val commandRawOutput = shellExecutor.execute("git diff --numstat $baseSha $headSha")
+    val additionDeletionPairs =
+      commandRawOutput
+        .lines()
+        .filter { it.isNotEmpty() }
+        .map { line ->
+          val parts = line.split("\\s+".toRegex())
+          (parts[0].toIntOrNull() ?: 0) to (parts[1].toIntOrNull() ?: 0)
+        }
+    val additions = additionDeletionPairs.fold(0) { acc, (addition, _) -> acc + addition }
+    val deletions = additionDeletionPairs.fold(0) { acc, (_, deletion) -> acc + deletion }
+    val commandRawDiffOutput = shellExecutor.execute("git diff $baseSha $headSha")
+    return PullRequestChangedLines(additions, deletions, commandRawDiffOutput)
+  }
 
-/**
- * Number of changed lines
- */
+/** Number of changed lines */
 val Git.linesOfCode: Int
-    get() = additions + deletions
+  get() = additions + deletions
 
-/**
- * Number of added lines
- */
+/** Number of added lines */
 val Git.additions: Int
-    get() = changedLines.additions
+  get() = changedLines.additions
 
-/**
- * Number of deleted lines
- */
+/** Number of deleted lines */
 val Git.deletions: Int
-    get() = changedLines.deletions
+  get() = changedLines.deletions
 
-/**
- * Reference to a SHA of head commit of this PR
- */
+/** Reference to a SHA of head commit of this PR */
 val Git.headSha: String?
-    get() = commits.sortChronologically().lastOrNull()?.sha
+  get() = commits.sortChronologically().lastOrNull()?.sha
 
-/**
- * Reference to a SHA of base commit of this PR
- */
+/** Reference to a SHA of base commit of this PR */
 val Git.baseSha: String?
-    get() = commits.sortChronologically().firstOrNull()?.sha?.let { "$it^1" }
+  get() = commits.sortChronologically().firstOrNull()?.sha?.let { "$it^1" }
 
-/**
- * Unified diff of this PR 
- */
+/** Unified diff of this PR */
 val Git.diff: String?
-    get() = changedLines.diff
+  get() = changedLines.diff
 
 /**
  * Wrapper for number of additions and deletions in currently processed Pull (or Merge) Request
@@ -71,11 +59,11 @@ val Git.diff: String?
  * @constructor Create empty PullRequestChangedLines
  */
 data class PullRequestChangedLines(
-    val additions: Int,
-    val deletions: Int,
-    val diff: String? = null
+  val additions: Int,
+  val deletions: Int,
+  val diff: String? = null,
 )
 
 private fun List<GitCommit>.sortChronologically(): List<GitCommit> {
-    return sortedBy { it.author.date }
+  return sortedBy { it.author.date }
 }

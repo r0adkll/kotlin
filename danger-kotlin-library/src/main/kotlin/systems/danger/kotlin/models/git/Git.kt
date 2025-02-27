@@ -13,10 +13,10 @@ typealias FilePath = String
  */
 @Serializable
 data class Git(
-    @SerialName("modified_files") val modifiedFiles: List<FilePath>,
-    @SerialName("created_files") val createdFiles: List<FilePath>,
-    @SerialName("deleted_files") val deletedFiles: List<FilePath>,
-    @SerialName("commits") val commits: List<GitCommit>
+  @SerialName("modified_files") val modifiedFiles: List<FilePath>,
+  @SerialName("created_files") val createdFiles: List<FilePath>,
+  @SerialName("deleted_files") val deletedFiles: List<FilePath>,
+  @SerialName("commits") val commits: List<GitCommit>,
 )
 
 /**
@@ -31,12 +31,12 @@ data class Git(
  */
 @Serializable
 data class GitCommit(
-    val sha: String? = null,
-    val author: GitCommitAuthor,
-    val committer: GitCommitAuthor,
-    val message: String,
-    val parents: List<String> = listOf(),
-    val url: String
+  val sha: String? = null,
+  val author: GitCommitAuthor,
+  val committer: GitCommitAuthor,
+  val message: String,
+  val parents: List<String> = listOf(),
+  val url: String,
 )
 
 /**
@@ -46,9 +46,4 @@ data class GitCommit(
  * @property email The email for the author.
  * @property date The ISO8601 date string for the commit.
  */
-@Serializable
-data class GitCommitAuthor(
-        val name: String,
-        val email: String,
-        val date: String
-)
+@Serializable data class GitCommitAuthor(val name: String, val email: String, val date: String)

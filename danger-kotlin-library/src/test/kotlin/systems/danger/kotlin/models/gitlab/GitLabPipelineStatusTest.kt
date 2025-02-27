@@ -9,10 +9,10 @@ import systems.danger.kotlin.utils.TestUtils.JSONFiles
 
 class GitLabPipelineStatusTest {
 
-    @Test
-    fun testItParsesGitLabCancelledPipeline() {
-        val dsl: DSL = TestUtils.Json.decodeFromString(JSONFiles.gitlabWithCancelledPipelineJSON)
-        val gitLab = dsl.danger.gitlab
-        assertEquals(GitLabPipelineStatus.CANCELLED, gitLab.mergeRequest.pipeline.status)
-    }
+  @Test
+  fun testItParsesGitLabCancelledPipeline() {
+    val dsl: DSL = TestUtils.Json.decodeFromString(JSONFiles.gitlabWithCancelledPipelineJSON)
+    val gitLab = dsl.danger.gitlab
+    assertEquals(GitLabPipelineStatus.CANCELLED, gitLab.mergeRequest.pipeline.status)
+  }
 }

@@ -1,23 +1,23 @@
 package systems.danger.kotlin
 
+import java.io.File
 import kotlinx.serialization.decodeFromString
 import org.junit.Assert
 import org.junit.Test
 import systems.danger.kotlin.models.danger.DSL
-import systems.danger.kotlin.utils.TestUtils.JSONFiles
 import systems.danger.kotlin.utils.TestUtils
-import java.io.File
+import systems.danger.kotlin.utils.TestUtils.JSONFiles
 
 class UtilsTests {
-    private val dsl: DSL = TestUtils.Json.decodeFromString(JSONFiles.githubDangerJSON)
+  private val dsl: DSL = TestUtils.Json.decodeFromString(JSONFiles.githubDangerJSON)
 
-    @Test
-    fun testReadText() {
-        val testFile = File("testFile")
-        testFile.writeText("Test")
+  @Test
+  fun testReadText() {
+    val testFile = File("testFile")
+    testFile.writeText("Test")
 
-        Assert.assertEquals("Test", dsl.danger.utils.readFile("testFile"))
+    Assert.assertEquals("Test", dsl.danger.utils.readFile("testFile"))
 
-        testFile.delete()
-    }
+    testFile.delete()
+  }
 }
