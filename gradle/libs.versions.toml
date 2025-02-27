@@ -2,6 +2,7 @@
 changelog = "2.2.1"
 clikt = "5.0.3"
 dokka = "2.0.0"
+github = "0.3.9"
 intelliJPlatform = "2.3.0"
 junit = "4.12"
 kotlin = "2.1.10"
@@ -29,8 +30,9 @@ intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "inte
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 
 [libraries]
-clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 junit = { module = "junit:junit", version.ref = "junit" }
+clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
+github = { module = "com.spotify:github-client", version.ref = "github" }
 kotlin-main-kts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref = "kotlin" }
 kotlin-script-runtime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -41,8 +43,8 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [bundles]
 testing = [ "junit", "mockk" ]

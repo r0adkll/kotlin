@@ -15,6 +15,7 @@ dependencies {
   api(libs.kotlinx.coroutines.core)
   api(libs.kotlinx.datetime)
   api(libs.kotlinx.serialization.json)
+  api(libs.github)
   implementation(libs.kotlin.main.kts)
   implementation(libs.kotlin.stdlib.jdk8)
 
