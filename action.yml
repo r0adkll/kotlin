@@ -16,7 +16,7 @@ inputs:
   job-id:
     description: 'Reported CI job ID'
     required: false
-    default: 'danger/kotlin'
+    default: 'r0adkll/danger-kotlin'
   args:
     description: 'Extra custom arguments like "--failOnErrors --no-publish-check" and etc'
     required: false

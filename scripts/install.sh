@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=1.3.3
+VERSION=2.0.0
 KOTLIN_VERSION=2.1.10
 
 while getopts v:h: flag
@@ -48,7 +48,7 @@ if ! [[ -x "$(command -v gradle)" ]]; then
     rm -rf gradle.zip
 fi
 
-git clone https://github.com/r0adkll/kotlin.git --branch "$VERSION" --depth 1 _danger-kotlin
+git clone https://github.com/r0adkll/danger-kotlin.git --branch "$VERSION" --depth 1 _danger-kotlin
 cd _danger-kotlin && make install
 cd ..
 rm -rf _danger-kotlin

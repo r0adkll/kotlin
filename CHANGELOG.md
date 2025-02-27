@@ -10,7 +10,15 @@
 //       see the bottom of this file
 
 -->
-## Master
+## Unreleased
+
+# 2.0.0
+- Forked repository to make substantial improvements to build configurations
+- Fixed bug in ScriptDefinition not loading jvm classpath correctly
+- Added IntelliJ Plugin that autoloads the script definition into IDEA/AS
+- Added GitHub client to script library that is hydrated based on the same env vars as danger-js
+
+# 1.3.3
 - Update README.md with guidance to enable auto-complete in Android Studio [@gianluz] - [#242](https://github.com/danger/kotlin/pull/242)
 - Update install script with Kotlin compiler 1.7.0 [@gianluz] - [#241](https://github.com/danger/kotlin/pull/241)
 - Add accessors for Danger reports [@417-72KI] - [#245](https://github.com/danger/kotlin/pull/245)
@@ -72,7 +80,7 @@
 - Add logger [@f-meloni] - [#126](https://github.com/danger/kotlin/pull/126)
 - Fix DangerKotlinScriptDefinition [@gianluz] - [#121](https://github.com/danger/kotlin/pull/121)
 - Update Kotlin to 1.4.0 [@uzzu][] - [#116](https://github.com/danger/kotlin/pull/116)
-- Fix crash at milestone.dueOn [@anton46][] - [#108](https://github.com/danger/kotlin/pull/119) 
+- Fix crash at milestone.dueOn [@anton46][] - [#108](https://github.com/danger/kotlin/pull/119)
 
 # 0.6.1
 

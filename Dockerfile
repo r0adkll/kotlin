@@ -8,7 +8,7 @@ LABEL "com.github.actions.icon"="zap"
 LABEL "com.github.actions.color"="red"
 
 ARG KOTLINC_VERSION="2.1.10"
-ARG DANGER_KOTLIN_VERSION="1.3.3"
+ARG DANGER_KOTLIN_VERSION="2.0.0"
 ARG DANGER_JS_VERSION="12.3.3"
 
 # Install dependencies
@@ -25,6 +25,6 @@ ENV PATH $PATH:/usr/lib/kotlinc/bin
 RUN npm install -g "danger@$DANGER_JS_VERSION"
 
 # Install Danger-Kotlin
-RUN wget -q "https://github.com/r0adkll/kotlin/releases/download/$DANGER_KOTLIN_VERSION/danger-kotlin-linuxX64.tar" && \
+RUN wget -q "https://github.com/r0adkll/danger-kotlin/releases/download/$DANGER_KOTLIN_VERSION/danger-kotlin-linuxX64.tar" && \
     tar -xvf "danger-kotlin-linuxX64.tar" -C /usr/local &&  \
     rm "danger-kotlin-linuxX64.tar"

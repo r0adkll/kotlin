@@ -9,7 +9,7 @@ import systems.danger.cmd.Command
 import systems.danger.cmd.dangerjs.DangerJS
 
 const val PROCESS_DANGER_KOTLIN = "danger-kotlin"
-const val VERSION = "1.3.3"
+const val VERSION = "2.0.0"
 
 class DangerCommand(private val originalArgv: Array<String>) :
   CliktCommand(name = "danger-kotlin") {
