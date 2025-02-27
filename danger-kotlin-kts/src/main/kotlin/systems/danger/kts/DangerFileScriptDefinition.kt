@@ -13,6 +13,7 @@ import kotlin.script.experimental.impl.internalScriptingRunSuspend
 import kotlin.script.experimental.jvm.compat.mapLegacyDiagnosticSeverity
 import kotlin.script.experimental.jvm.compat.mapLegacyScriptPosition
 import kotlin.script.experimental.jvm.dependenciesFromClassContext
+import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvm.updateClasspath
 import kotlin.script.experimental.jvmhost.jsr223.configureProvidedPropertiesFromJsr223Context
@@ -43,8 +44,6 @@ object DangerFileScriptDefinition :
       dependenciesFromClassContext(
         DangerFileScriptDefinition::class,
         "danger-kotlin",
-        "kotlin-stdlib",
-        "kotlin-reflect",
       )
     }
     refineConfiguration {

@@ -1,5 +1,6 @@
 # Idea
 .idea/
+.intellijPlatform/
 *.iml
 *.iws
 *.ipr
@@ -9,6 +10,9 @@ local.properties
 #Gradle
 .gradle/
 build/
+
+#Kotlin
+.kotlin/
 
 #OSx
 .DS_Store

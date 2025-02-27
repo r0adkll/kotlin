@@ -1,0 +1,20 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+  <id>com.r0adkll.danger</id>
+  <name>Danger Kotlin</name>
+  <vendor>r0adkll</vendor>
+
+  <depends>com.intellij.modules.platform</depends>
+  <depends>org.jetbrains.kotlin</depends>
+
+  <resource-bundle>messages.DangerBundle</resource-bundle>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity" />
+  </extensions>
+
+  <extensions defaultExtensionNs="org.jetbrains.kotlin">
+    <supportsKotlinPluginMode supportsK2="true" />
+    <scriptDefinitionsSource implementation="com.r0adkll.danger.DangerScriptDefinitionsSource" />
+  </extensions>
+</idea-plugin>

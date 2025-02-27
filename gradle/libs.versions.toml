@@ -1,12 +1,16 @@
 [versions]
+changelog = "2.2.1"
 clikt = "5.0.3"
 dokka = "2.0.0"
+intelliJPlatform = "2.3.0"
 junit = "4.12"
 kotlin = "2.1.10"
 kotlinx-serialization = "1.7.3"
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.9.0"
+kover = "0.8.3"
 ktfmt = "0.54"
+ktor = "3.1.0"
 mavenPublish = "0.30.0"
 okio = "1.16.0"
 mockk = "1.10.0"
@@ -20,6 +24,9 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 shadowJar = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
+intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 
 [libraries]
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
@@ -30,6 +37,9 @@ kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versi
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines"}
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }

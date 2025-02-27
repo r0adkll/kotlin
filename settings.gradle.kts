@@ -19,12 +19,11 @@ dependencyResolutionManagement {
   }
 }
 
-include(":danger-kotlin")
-
-include(":danger-kotlin-library")
-
-include(":danger-kotlin-sdk")
-
-include(":danger-kotlin-kts")
-
-include(":danger-plugin-installer")
+include(
+  ":danger-kotlin",
+  ":danger-kotlin-library",
+  ":danger-kotlin-sdk",
+  ":danger-kotlin-kts",
+  ":danger-plugin-installer",
+)
+include(":intellij-plugin")
