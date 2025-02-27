@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [2.0.0]
+
 ### Changed
 
 * Initial release

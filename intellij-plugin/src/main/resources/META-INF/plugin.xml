@@ -2,7 +2,9 @@
 <idea-plugin>
   <id>com.r0adkll.danger</id>
   <name>Danger Kotlin</name>
-  <vendor>r0adkll</vendor>
+  <vendor email="veedubusc@gmail.com" url="https://github.com/r0adkll/danger-kotlin">
+    r0adkll
+  </vendor>
 
   <depends>com.intellij.modules.platform</depends>
   <depends>org.jetbrains.kotlin</depends>
@@ -10,11 +12,11 @@
   <resource-bundle>messages.DangerBundle</resource-bundle>
 
   <extensions defaultExtensionNs="com.intellij">
-    <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity" />
+    <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity"/>
   </extensions>
 
   <extensions defaultExtensionNs="org.jetbrains.kotlin">
-    <supportsKotlinPluginMode supportsK2="true" />
-    <scriptDefinitionsSource implementation="com.r0adkll.danger.DangerScriptDefinitionsSource" />
+    <supportsKotlinPluginMode supportsK2="true"/>
+    <scriptDefinitionsSource implementation="com.r0adkll.danger.DangerScriptDefinitionsSource"/>
   </extensions>
 </idea-plugin>

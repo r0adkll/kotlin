@@ -28,3 +28,5 @@ include(
 )
 
 include(":intellij-plugin")
+
+rootProject.name = "danger-kotlin"

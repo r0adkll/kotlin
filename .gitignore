@@ -58,3 +58,5 @@ hs_err_pid*
 
 # Danger Temporary Files #
 danger_out.json
+
+intellij-plugin/.secrets/
