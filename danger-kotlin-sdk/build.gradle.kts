@@ -2,11 +2,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   kotlin("jvm")
-  id("maven-publish")
-  id("signing")
+  alias(libs.plugins.mavenPublish)
 }
-
-// apply from: file('maven-publish.gradle')
 
 dependencies { implementation(libs.kotlin.stdlib.jdk8) }
 

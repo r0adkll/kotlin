@@ -36,14 +36,6 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
     }
-
-    //        // Apply license formatting separately for kotlin files so we can prevent it from
-    // overwriting
-    //        // copied files
-    //        format("license") {
-    //            licenseHeaderFile(rootProject.file("spotless/spotless.kt"), "(package|@file:)")
-    //            target("src/**/*.kt")
-    //        }
   }
   configure<SpotlessExtension> {
     spotlessFormatters()

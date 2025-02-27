@@ -12,7 +12,7 @@ on:
         description: "Danger Kotlin release version"
       kotlin-version:
         description: "Kotlin Version"
-        default: "2.0.21"
+        default: "2.1.10"
 
 jobs:
   docker-build-push:
@@ -31,7 +31,7 @@ jobs:
           USERNAME: ${{ github.actor }}
 
       - name: Docker Build
-        run: docker build -t ghcr.io/danger/danger-kotlin:$VERSION --build-arg="KOTLINC_VERSION=$KOTLINC_VERSION" --build-arg="DANGER_KOTLIN_VERSION=$DANGER_KOTLIN_VERSION" --build-arg="DANGER_JS_VERSION=$DANGER_JS_VERSION" .
+        run: docker build -t ghcr.io/r0adkll/danger-kotlin:$VERSION --build-arg="KOTLINC_VERSION=$KOTLINC_VERSION" --build-arg="DANGER_KOTLIN_VERSION=$DANGER_KOTLIN_VERSION" --build-arg="DANGER_JS_VERSION=$DANGER_JS_VERSION" .
         env:
           VERSION: ${{ github.event.inputs.docker-version }}
           KOTLINC_VERSION: ${{ github.event.inputs.kotlin-version }}
@@ -39,6 +39,6 @@ jobs:
           DANGER_JS_VERSION: ${{ github.event.inputs.danger-js-version }}
 
       - name: Deploy
-        run: docker push ghcr.io/danger/danger-kotlin:$VERSION
+        run: docker push ghcr.io/r0adkll/danger-kotlin:$VERSION
         env:
           VERSION: ${{ github.event.inputs.docker-version }}

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 VERSION=1.3.3
+KOTLIN_VERSION=2.1.10
 
 while getopts v:h: flag
 do
@@ -31,8 +32,8 @@ if [[ -n "$sudo" && "$OSTYPE" != "darwin"* ]]; then
 fi
 
 if ! [[ -x "$(command -v kotlinc)" ]]; then
-    echo "Installing kotlin compiler 2.0.21"
-    curl -o kotlin-compiler.zip -L https://github.com/JetBrains/kotlin/releases/download/v2.0.21/kotlin-compiler-2.0.21.zip
+    echo "Installing kotlin compiler ${KOTLIN_VERSION}"
+    curl -o kotlin-compiler.zip -L "https://github.com/JetBrains/kotlin/releases/download/v${KOTLIN_VERSION}/kotlin-compiler-${KOTLIN_VERSION}.zip"
     unzip -d /usr/local/ kotlin-compiler.zip
     echo 'export PATH=/usr/local/kotlinc/bin:$PATH' >> ~/.bash_profile
     rm -rf kotlin-compiler.zip
@@ -47,7 +48,7 @@ if ! [[ -x "$(command -v gradle)" ]]; then
     rm -rf gradle.zip
 fi
 
-git clone https://github.com/danger/kotlin.git --branch $VERSION --depth 1 _danger-kotlin
+git clone https://github.com/r0adkll/kotlin.git --branch "$VERSION" --depth 1 _danger-kotlin
 cd _danger-kotlin && make install
 cd ..
 rm -rf _danger-kotlin

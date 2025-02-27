@@ -8,9 +8,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-    
+
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -21,24 +21,24 @@ jobs:
 
       - name: Install Kotlin
         run: |
-          curl -o kotlin-compiler.zip -L https://github.com/JetBrains/kotlin/releases/download/v2.0.21/kotlin-compiler-2.0.21.zip
-          
+          curl -o kotlin-compiler.zip -L https://github.com/JetBrains/kotlin/releases/download/v2.1.10/kotlin-compiler-2.1.10.zip
+
           if [[ "$OSTYPE" != "darwin"* ]]
           then
             sudo chmod -R a+rwx /usr/local/
-            
+
             unzip -d /usr/local/bin kotlin-compiler.zip
             echo "/usr/local/bin/kotlinc/bin" >> $GITHUB_PATH
             rm -rf kotlin-compiler.zip
           fi
-        
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22.10.0'
 
       - name: Install Danger JS
         run: npm install -g danger
-       
+
       - name: Install Danger Kotlin
         run: sudo make install
 
@@ -54,7 +54,7 @@ jobs:
           sudo gradle wrapper
           sudo ./gradlew build
           sudo ./gradlew installDangerPlugin
-      
+
       - name: Run Danger-Kotlin
         run: DEBUG='*' danger-kotlin ci --dangerfile Dangerfile_ci.df.kts
         env:

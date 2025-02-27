@@ -99,11 +99,11 @@ jobs:
           USERNAME: ${{ github.actor }}
 
       - name: Docker Build
-        run: docker build -t ghcr.io/danger/danger-kotlin:$VERSION .
+        run: docker build -t ghcr.io/r0adkll/danger-kotlin:$VERSION .
         env:
           VERSION: ${{ steps.get_release.outputs.tag_name }}
 
       - name: Deploy
-        run: docker push ghcr.io/danger/danger-kotlin:$VERSION
+        run: docker push ghcr.io/r0adkll/danger-kotlin:$VERSION
         env:
           VERSION: ${{ steps.get_release.outputs.tag_name }}
