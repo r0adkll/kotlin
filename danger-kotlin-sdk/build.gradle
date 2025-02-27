@@ -1,10 +1,11 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
     id 'signing'
 }
 
-apply from: file('version.gradle')
 apply from: file('maven-publish.gradle')
 
 repositories {
@@ -12,17 +13,16 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation libs.kotlin.stdlib.jdk8
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_1_8
+    }
 }
 
-tasks.withType(JavaCompile).configureEach {
+java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }

@@ -1,8 +1,0 @@
-configurations {
-    implementation.extendsFrom includeJar {
-        transitive = false
-    }
-    api.extendsFrom includeRecursiveJar {
-        transitive = true
-    }
-}

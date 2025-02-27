@@ -1,33 +1,7 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
-        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.2"
-    }
+plugins {
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.kotlinSerialization) apply false
+    alias(libs.plugins.shadowJar) apply false
 }
 
 apply from: file('secrets.gradle')
-apply plugin: 'io.codearte.nexus-staging'
-
-nexusStaging {
-    packageGroup = "systems.danger"
-    username = loadSecret("SONATYPE_USER")
-    password = loadSecret("SONATYPE_PASS")
-    delayBetweenRetriesInMillis = 5000
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        maven {
-            url = "https://kotlin.bintray.com/kotlinx/"
-        }
-    }
-}
-
