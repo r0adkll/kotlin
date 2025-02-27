@@ -8,6 +8,9 @@ Version](https://img.shields.io/badge/danger%20kotlin-v2.0.0-orange)](https://da
 ⚠️ Stop saying "you forgot to …" in code review in Kotlin
 </p>
 
+# Fork
+This is a fork of the danger/kotlin library to make customizations and improvements to my own design.
+
 # Project status
 The project is now on a stable version.
 Is possible to generate a working `danger-kotlin` instance from the code that is currently on this repo, or use it via GitHub actions or `brew`.
