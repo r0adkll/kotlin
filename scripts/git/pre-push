@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# A pre-push hook to run spotlessApply before pushing commits so I don't
+# forget to format and fail code-style checks
+
+./gradlew spotlessApply
+
+if [ -n "$(git status -s -uall)" ]
+then
+  echo >&2 "You have changes, please commit or stash them."
+  exit 1
+fi
