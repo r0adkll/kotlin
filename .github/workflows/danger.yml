@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Danger
-        uses: r0adkll/danger-kotlin@${{ github.sha }}
+        uses: ./
         with:
           args: "--id DangerKotlinAction"
         env:
