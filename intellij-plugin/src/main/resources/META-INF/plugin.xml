@@ -13,6 +13,10 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity"/>
+
+    <runLineMarkerContributor language="kotlin"
+                              implementationClass="com.r0adkll.danger.gutter.DangerRunLineMarkerContributor"
+                              />
   </extensions>
 
   <extensions defaultExtensionNs="org.jetbrains.kotlin">
