@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.r0adkll.danger:danger-plugin-installer:0.1-alpha"
+        classpath "com.r0adkll.danger:danger-plugin-installer:2.0.0"
     }
 }
 
