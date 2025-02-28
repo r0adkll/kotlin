@@ -12,6 +12,11 @@
 -->
 ## Unreleased
 
+# 2.0.1
+- Fixing how clikt parses arguments to prevent it from choking
+- Setup publishing for IntelliJ Plugin
+- More repo maintenance.
+
 # 2.0.0
 - Forked repository to make substantial improvements to build configurations
 - Fixed bug in ScriptDefinition not loading jvm classpath correctly

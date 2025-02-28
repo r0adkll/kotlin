@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [2.0.1]
+
+### Changed
+
+* Bumping version danger-kotlin that doesn't break
+
 ## [2.0.0]
 
 ### Changed
