@@ -100,6 +100,11 @@ jobs:
 
       - name: Publish Plugin
         run: ./gradlew :intellij-plugin:publishPlugin
+        env:
+          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 
       - name: Set release version code env var
         run: ./scripts/gha_set_version.sh
