@@ -4,12 +4,12 @@ buildscript {
     }
 
     dependencies {
-        classpath "systems.danger:danger-plugin-installer:0.1-alpha"
+        classpath "com.r0adkll.danger:danger-plugin-installer:2.0.0"
     }
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.0.21'
+    id 'org.jetbrains.kotlin.jvm' version '2.1.10'
 }
 
 apply plugin: 'danger-kotlin-plugin-installer'

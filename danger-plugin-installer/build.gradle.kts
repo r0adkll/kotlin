@@ -4,10 +4,6 @@ plugins {
   alias(libs.plugins.mavenPublish)
 }
 
-group = "systems.danger"
-
-version = "0.1-alpha"
-
 gradlePlugin {
   plugins {
     create("simplePlugin") {

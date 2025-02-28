@@ -91,8 +91,10 @@ subprojects {
     }
 
     configure<MavenPublishBaseExtension> {
-      publishToMavenCentral(automaticRelease = true)
-      signAllPublications()
+      publishToMavenCentral(automaticRelease = isPublished)
+      if (isPublished) {
+        signAllPublications()
+      }
     }
   }
 }

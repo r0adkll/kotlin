@@ -11,7 +11,7 @@ object DangerKotlin {
     if (dangerDSLPath != null) {
       Log.info("Got Danger DSL path $dangerDSLPath", true)
     } else {
-      Log.error("Didn't receive a DSL path")
+      Log.error("Didn't receive a DSL path", true)
     }
 
     dangerDSLPath?.removePrefix("danger://dsl/")?.stripEndLine()?.let {

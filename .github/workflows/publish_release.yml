@@ -17,8 +17,10 @@ jobs:
           distribution: "temurin"
           java-version: 23
           cache: gradle
+
       - name: danger-kotlin-library:shadowJar
         run: ./gradlew danger-kotlin-library:shadowJar
+
       - name: Upload Artifact lib
         uses: actions/upload-artifact@v4
         with:
@@ -48,6 +50,7 @@ jobs:
           distribution: "temurin"
           java-version: 23
           cache: gradle
+
       - name: danger-kotlin:build -PtargetOS="${{ matrix.target.compiler }}"
         run: ./gradlew danger-kotlin:build -PtargetOS="${{ matrix.target.compiler }}"
       - name: Prepare distribution package
@@ -61,11 +64,13 @@ jobs:
         run: |
           tar -cvf danger-kotlin-${{ matrix.target.compiler }}.tar bin lib
           shasum -a 256 danger-kotlin-${{ matrix.target.compiler }}.tar
+
       - name: Get release information
         id: get_release
         uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
       - name: Upload artifacts to release
         uses: actions/upload-release-asset@v1.0.2
         env:
@@ -75,6 +80,45 @@ jobs:
           asset_path: ./danger-kotlin-${{ matrix.target.compiler }}.tar
           asset_name: danger-kotlin-${{ matrix.target.compiler }}.tar
           asset_content_type: application/x-tar
+
+  jetbrains-marketplace-publish:
+    name: Publish IntelliJ Plugin
+    needs: [ dangerKotlinLibrary-shadowJar ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 23
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: 23
+          cache: gradle
+
+      - name: Verify Plugin
+        run: ./gradlew :intellij-plugin:verifyPlugin
+
+      - name: Publish Plugin
+        run: ./gradlew :intellij-plugin:publishPlugin
+
+      - name: Set release version code env var
+        run: ./scripts/gha_set_version.sh
+
+      - name: Get release information
+        id: get_release
+        uses: bruceadams/get-release@v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload artifacts to release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: ./intellij-plugin/build/distributions/intellij-plugin-${{ env.VERSION_CODE }}-signed.zip
+          asset_name: intellij-plugin-${{ env.VERSION_CODE }}-signed.zip
+          asset_content_type: application/zip
 
   docker-build-push:
     name: Build and Push Docker image

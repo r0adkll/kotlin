@@ -60,17 +60,13 @@ class DangerService(private val project: Project) {
 
   private fun scriptDefinition(config: DangerConfig): ScriptDefinition? {
     return loadDefinitionsFromTemplatesByPaths(
-      templateClassNames = listOf(config.className),
-      templateClasspath = listOf(config.classPath),
-      baseHostConfiguration =
-        ScriptingHostConfiguration(defaultJvmScriptingHostConfiguration) {
-          getEnvironment {
-            mapOf(
-                "projectRoot" to (project.basePath)?.let(::File),
-            )
-          }
-        },
-    )
+        templateClassNames = listOf(config.className),
+        templateClasspath = listOf(config.classPath),
+        baseHostConfiguration =
+          ScriptingHostConfiguration(defaultJvmScriptingHostConfiguration) {
+            getEnvironment { mapOf("projectRoot" to (project.basePath)?.let(::File)) }
+          },
+      )
       .firstOrNull()
   }
 
@@ -119,8 +115,7 @@ class DangerService(private val project: Project) {
   }
 
   private fun getDangerSourceJarPath(version: String): Path {
-    return getDangerSourceDirectory(version)
-      ?.resolve(DANGER_SOURCE_JAR_NAME)
+    return getDangerSourceDirectory(version)?.resolve(DANGER_SOURCE_JAR_NAME)
       ?: error("Unable to resolve danger source jar file path")
   }
 }

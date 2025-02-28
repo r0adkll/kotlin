@@ -3,7 +3,7 @@ package systems.danger.cmd.dangerfile
 import kotlinx.cinterop.CPointer
 import platform.posix.*
 import systems.danger.Log
-import systems.danger.cmd.*
+import systems.danger.cmd.exec
 
 object DangerFile : DangerFileBridge {
   private const val DANGERFILE_EXTENSION = ".df.kts"
@@ -40,7 +40,7 @@ object DangerFile : DangerFileBridge {
 
     Log.info("Compiling Dangerfile $dangerfile", true)
 
-    exec("kotlinc") {
+    exec("kotlinc", verbose = true) {
       arguments(
         "-script-templates",
         "systems.danger.kts.DangerFileScript",
