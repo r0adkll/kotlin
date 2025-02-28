@@ -11,6 +11,11 @@ import systems.danger.cmd.dangerjs.DangerJS
 const val PROCESS_DANGER_KOTLIN = "danger-kotlin"
 const val VERSION = "2.0.0"
 
+data class DangerCommandConfig(
+  var verbose: Boolean = false,
+  var dangerKotlinJar: String? = null,
+)
+
 class DangerCommand(private val originalArgv: Array<String>) :
   CliktCommand(name = "danger-kotlin") {
 
@@ -19,10 +24,26 @@ class DangerCommand(private val originalArgv: Array<String>) :
   }
 
   private val verbose by option("-v", "--verbose").flag()
+  private val dangerKotlinJar by option(
+    "--jar",
+    help = "Explicitly specify the danger-kotlin.jar to run the script with",
+  )
+
+  private val config by findOrSetObject { DangerCommandConfig() }
+
+  override val invokeWithoutSubcommand: Boolean = true
 
   override fun run() {
     if (verbose) {
       echo("Starting Danger-Kotlin $VERSION with args '${originalArgv.joinToString(", ")}'")
+    }
+
+    config.verbose = verbose
+    config.dangerKotlinJar = dangerKotlinJar
+
+    // If the CLI was called without a subcommand, then just run the dangerkotlin execute
+    if (currentContext.invokedSubcommand == null) {
+      DangerKotlin.run(dangerKotlinJar)
     }
   }
 }
@@ -31,6 +52,8 @@ class DangerCommand(private val originalArgv: Array<String>) :
 //  this leaves the terminal documentation to be desired. Expand these Clikt commands to parse the
 //  allowed arguments/parameters and then pass them through.
 class DangerJsCommand(private val command: Command) : CliktCommand(name = command.argument) {
+
+  override val treatUnknownOptionsAsArgs: Boolean = true
 
   private val arguments by argument().multiple()
 
@@ -47,10 +70,12 @@ class DangerJsCommand(private val command: Command) : CliktCommand(name = comman
 
 class RunnerCommand : CliktCommand(name = "runner") {
 
+  private val config by requireObject<DangerCommandConfig>()
+
   override fun help(context: Context): String = Command.RUNNER.description
 
   override fun run() {
-    DangerKotlin.run()
+    DangerKotlin.run(config.dangerKotlinJar)
   }
 }
 

@@ -16,8 +16,8 @@ object DangerFile : DangerFileBridge {
       "/usr", // Fallback
     )
 
-  override fun execute(inputJson: String, outputJson: String) {
-    val dangerKotlinJarPath =
+  override fun execute(dangerKotlinJarOverride: String?, inputJson: String, outputJson: String) {
+    val dangerKotlinJarPath = dangerKotlinJarOverride?.takeIf { access(it, F_OK) == 0 } ?:
       platformExpectedLibLocations
         .map { "$it/lib/danger/danger-kotlin.jar" }
         .filter { access(it, F_OK) == 0 }
