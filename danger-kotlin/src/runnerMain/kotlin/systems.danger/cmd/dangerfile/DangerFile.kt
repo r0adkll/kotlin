@@ -3,7 +3,7 @@ package systems.danger.cmd.dangerfile
 import kotlinx.cinterop.CPointer
 import platform.posix.*
 import systems.danger.Log
-import systems.danger.cmd.*
+import systems.danger.cmd.exec
 
 object DangerFile : DangerFileBridge {
   private const val DANGERFILE_EXTENSION = ".df.kts"
@@ -16,8 +16,8 @@ object DangerFile : DangerFileBridge {
       "/usr", // Fallback
     )
 
-  override fun execute(dangerKotlinJarOverride: String?, inputJson: String, outputJson: String) {
-    val dangerKotlinJarPath = dangerKotlinJarOverride?.takeIf { access(it, F_OK) == 0 } ?:
+  override fun execute(inputJson: String, outputJson: String) {
+    val dangerKotlinJarPath =
       platformExpectedLibLocations
         .map { "$it/lib/danger/danger-kotlin.jar" }
         .filter { access(it, F_OK) == 0 }
@@ -40,7 +40,7 @@ object DangerFile : DangerFileBridge {
 
     Log.info("Compiling Dangerfile $dangerfile", true)
 
-    exec("kotlinc") {
+    exec("kotlinc", verbose = true) {
       arguments(
         "-script-templates",
         "systems.danger.kts.DangerFileScript",

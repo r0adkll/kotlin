@@ -5,16 +5,14 @@ import com.github.ajalt.clikt.parameters.options.eagerOption
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import systems.danger.DangerKotlin
+import systems.danger.Log
 import systems.danger.cmd.Command
 import systems.danger.cmd.dangerjs.DangerJS
 
 const val PROCESS_DANGER_KOTLIN = "danger-kotlin"
 const val VERSION = "2.0.0"
 
-data class DangerCommandConfig(
-  var verbose: Boolean = false,
-  var dangerKotlinJar: String? = null,
-)
+data class DangerCommandConfig(var verbose: Boolean = false, var dangerKotlinJar: String? = null)
 
 class DangerCommand(private val originalArgv: Array<String>) :
   CliktCommand(name = "danger-kotlin") {
@@ -23,11 +21,7 @@ class DangerCommand(private val originalArgv: Array<String>) :
     eagerOption("--version") { throw PrintMessage("$PROCESS_DANGER_KOTLIN version $VERSION") }
   }
 
-  private val verbose by option("-v", "--verbose").flag()
-  private val dangerKotlinJar by option(
-    "--jar",
-    help = "Explicitly specify the danger-kotlin.jar to run the script with",
-  )
+  private val verbose by option("-v", "--verbose").flag(default = true)
 
   private val config by findOrSetObject { DangerCommandConfig() }
 
@@ -39,11 +33,11 @@ class DangerCommand(private val originalArgv: Array<String>) :
     }
 
     config.verbose = verbose
-    config.dangerKotlinJar = dangerKotlinJar
+    Log.isVerbose = verbose
 
     // If the CLI was called without a subcommand, then just run the dangerkotlin execute
     if (currentContext.invokedSubcommand == null) {
-      DangerKotlin.run(dangerKotlinJar)
+      DangerKotlin.run()
     }
   }
 }
@@ -52,7 +46,6 @@ class DangerCommand(private val originalArgv: Array<String>) :
 //  this leaves the terminal documentation to be desired. Expand these Clikt commands to parse the
 //  allowed arguments/parameters and then pass them through.
 class DangerJsCommand(private val command: Command) : CliktCommand(name = command.argument) {
-
   override val treatUnknownOptionsAsArgs: Boolean = true
 
   private val arguments by argument().multiple()
@@ -70,12 +63,14 @@ class DangerJsCommand(private val command: Command) : CliktCommand(name = comman
 
 class RunnerCommand : CliktCommand(name = "runner") {
 
-  private val config by requireObject<DangerCommandConfig>()
+  override val treatUnknownOptionsAsArgs: Boolean = true
+
+  private val arguments by argument().multiple()
 
   override fun help(context: Context): String = Command.RUNNER.description
 
   override fun run() {
-    DangerKotlin.run(config.dangerKotlinJar)
+    DangerKotlin.run()
   }
 }
 

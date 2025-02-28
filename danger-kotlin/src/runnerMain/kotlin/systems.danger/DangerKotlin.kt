@@ -5,18 +5,18 @@ import systems.danger.cmd.dangerfile.DangerFile
 object DangerKotlin {
   private const val FILE_TMP_OUTPUT_JSON = "danger_out.json"
 
-  fun run(dangerKotlinJar: String? = null) {
+  fun run() {
     val dangerDSLPath = readlnOrNull()
 
     if (dangerDSLPath != null) {
       Log.info("Got Danger DSL path $dangerDSLPath", true)
     } else {
-      Log.error("Didn't receive a DSL path")
+      Log.error("Didn't receive a DSL path", true)
     }
 
     dangerDSLPath?.removePrefix("danger://dsl/")?.stripEndLine()?.let {
       Log.info("Stripped DSL Path $it", true)
-      with(DangerFile) { execute(dangerKotlinJar, it, FILE_TMP_OUTPUT_JSON) }
+      with(DangerFile) { execute(it, FILE_TMP_OUTPUT_JSON) }
 
       printResult()
     }
