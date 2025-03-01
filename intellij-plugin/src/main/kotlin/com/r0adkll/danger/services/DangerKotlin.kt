@@ -36,8 +36,9 @@ class DangerKotlin(private val project: Project, private val scope: CoroutineSco
   fun runLocal(dangerFile: String) =
     scope.launch(Dispatchers.Default) {
       // Find the danger-js runtime
-      val dangerJsPath = ExecUtil.execAndReadLine(GeneralCommandLine("which", "danger"))
-        ?: error("Unable to find danger path")
+      val dangerJsPath =
+        ExecUtil.execAndReadLine(GeneralCommandLine("which", "danger"))
+          ?: error("Unable to find danger path")
 
       Runtime.getRuntime()
         .exec(
@@ -65,8 +66,7 @@ class DangerKotlin(private val project: Project, private val scope: CoroutineSco
             this@DangerKotlin.thisLogger().warn("EXIT: ${exitHandle.info()}")
 
             this.children().forEach { child ->
-              this@DangerKotlin.thisLogger()
-                .warn("--CHILD: ${child.info().commandLine()}")
+              this@DangerKotlin.thisLogger().warn("--CHILD: ${child.info().commandLine()}")
             }
           }
         }
