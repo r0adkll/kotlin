@@ -12,16 +12,10 @@ import org.jetbrains.kotlin.psi.KtScriptInitializer
 
 class DangerRunLineMarkerContributor : RunLineMarkerContributor() {
   override fun getInfo(element: PsiElement): Info? {
-    if (
-      element is LeafPsiElement &&
-      element.text == "danger" &&
-      element.hasScriptParent()
-    ) {
+    if (element is LeafPsiElement && element.text == "danger" && element.hasScriptParent()) {
       return Info(
         AllIcons.RunConfigurations.TestState.Run,
-        arrayOf<AnAction>(
-          DangerRunAction(element),
-        ),
+        arrayOf<AnAction>(DangerRunAction(element)),
       )
     }
     return null

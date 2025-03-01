@@ -10,13 +10,9 @@ class Cmd internal constructor(private val name: String) {
     arguments = arg
   }
 
-  internal fun exec(verbose: Boolean) {
+  internal fun exec() {
     "$name ${arguments.joinToString(" ")}"
-      .apply {
-        if (verbose) {
-          Log.info("Executing $this - pid ${getpid()}")
-        }
-      }
+      .apply { Log.info("Executing $this - pid ${getpid()}") }
       .also {
         val exitCode = system(it)
 
@@ -27,7 +23,7 @@ class Cmd internal constructor(private val name: String) {
   }
 }
 
-fun exec(name: String, verbose: Boolean = false, builder: Cmd.() -> Unit) {
+fun exec(name: String, builder: Cmd.() -> Unit) {
   val cmd = Cmd(name).apply(builder)
-  cmd.exec(verbose)
+  cmd.exec()
 }
