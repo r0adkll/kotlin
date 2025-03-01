@@ -12,6 +12,8 @@
   <resource-bundle>messages.DangerBundle</resource-bundle>
 
   <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="com.r0adkll.danger.run.DangerRunConfigurationType" />
+
     <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity"/>
 
     <runLineMarkerContributor language="kotlin"
