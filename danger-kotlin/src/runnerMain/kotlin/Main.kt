@@ -33,7 +33,7 @@ class DangerCommand(private val originalArgv: Array<String>) :
     if (verbose) {
       echo(
         "Starting Danger-Kotlin ${BuildConfig.VERSION} " +
-          "with args '${originalArgv.joinToString(", ")}'",
+          "with args '${originalArgv.joinToString(", ")}'"
       )
     }
 
