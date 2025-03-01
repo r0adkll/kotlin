@@ -16,7 +16,6 @@ import kotlinx.datetime.Clock
 import org.apache.commons.text.WordUtils
 import systems.danger.kotlin.*
 import systems.danger.kotlin.models.danger.DangerDSL
-
 import systems.danger.samples.plugin.SamplePlugin
 
 register plugin SamplePlugin

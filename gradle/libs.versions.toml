@@ -1,4 +1,5 @@
 [versions]
+buildconfig = "5.5.1"
 changelog = "2.2.1"
 clikt = "5.0.3"
 dokka = "2.0.0"
@@ -19,6 +20,7 @@ shadow = "9.0.0-beta9"
 spotless = "6.25.0"
 
 [plugins]
+buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -30,9 +32,9 @@ intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "inte
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 
 [libraries]
-junit = { module = "junit:junit", version.ref = "junit" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 github = { module = "com.spotify:github-client", version.ref = "github" }
+junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-main-kts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref = "kotlin" }
 kotlin-script-runtime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }

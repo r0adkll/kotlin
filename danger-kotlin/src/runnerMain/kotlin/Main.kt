@@ -4,13 +4,13 @@ import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.options.eagerOption
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.r0adkll.danger.BuildConfig
 import systems.danger.DangerKotlin
 import systems.danger.Log
 import systems.danger.cmd.Command
 import systems.danger.cmd.dangerjs.DangerJS
 
 const val PROCESS_DANGER_KOTLIN = "danger-kotlin"
-const val VERSION = "2.0.0"
 
 data class DangerCommandConfig(var verbose: Boolean = false, var dangerKotlinJar: String? = null)
 
@@ -18,7 +18,9 @@ class DangerCommand(private val originalArgv: Array<String>) :
   CliktCommand(name = "danger-kotlin") {
 
   init {
-    eagerOption("--version") { throw PrintMessage("$PROCESS_DANGER_KOTLIN version $VERSION") }
+    eagerOption("--version") {
+      throw PrintMessage("$PROCESS_DANGER_KOTLIN version ${BuildConfig.VERSION}")
+    }
   }
 
   private val verbose by option("-v", "--verbose").flag(default = true)
@@ -29,7 +31,10 @@ class DangerCommand(private val originalArgv: Array<String>) :
 
   override fun run() {
     if (verbose) {
-      echo("Starting Danger-Kotlin $VERSION with args '${originalArgv.joinToString(", ")}'")
+      echo(
+        "Starting Danger-Kotlin ${BuildConfig.VERSION} " +
+          "with args '${originalArgv.joinToString(", ")}'",
+      )
     }
 
     config.verbose = verbose
