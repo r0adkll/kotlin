@@ -18,12 +18,13 @@ import com.intellij.util.ui.FormBuilder
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class DangerRunConfigurationType : ConfigurationTypeBase(
-  id = ID,
-  displayName = "Danger Run",
-  description = "Run a Dangerfile.df.kts",
-  icon = NotNullLazyValue.createValue { AllIcons.Nodes.Console },
-) {
+class DangerRunConfigurationType :
+  ConfigurationTypeBase(
+    id = ID,
+    displayName = "Danger Run",
+    description = "Run a Dangerfile.df.kts",
+    icon = NotNullLazyValue.createValue { AllIcons.Nodes.Console },
+  ) {
   init {
     addFactory(DangerKotlinRunConfigurationFactory(this))
   }
@@ -46,8 +47,7 @@ class DangerKotlinRunConfigurationFactory(type: ConfigurationType) : Configurati
 
 class DangerRunConfigurationOptions : RunConfigurationOptions() {
 
-  private val _dangerFilePath = string(null)
-    .provideDelegate(this, "dangerFileName")
+  private val _dangerFilePath = string(null).provideDelegate(this, "dangerFileName")
 
   var dangerFilePath: String?
     get() = _dangerFilePath.getValue(this)
@@ -56,11 +56,8 @@ class DangerRunConfigurationOptions : RunConfigurationOptions() {
     }
 }
 
-class DangerRunConfiguration(
-  project: Project,
-  factory: ConfigurationFactory?,
-  name: String?,
-) : RunConfigurationBase<DangerRunConfigurationOptions>(project, factory, name) {
+class DangerRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
+  RunConfigurationBase<DangerRunConfigurationOptions>(project, factory, name) {
 
   var dangerFilePath: String?
     get() = options.dangerFilePath
@@ -76,20 +73,22 @@ class DangerRunConfiguration(
     return object : CommandLineState(env) {
 
       override fun startProcess(): ProcessHandler {
-        val commandLine = GeneralCommandLine(
-          "danger-kotlin",
-          "local",
-          "--base",
-          "main",
-          "-d",
-          options.dangerFilePath,
-        ).apply {
-          withWorkingDirectory(project.basePath?.toNioPathOrNull())
-          withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM)
-        }
+        val commandLine =
+          GeneralCommandLine(
+              "danger-kotlin",
+              "local",
+              "--base",
+              "main",
+              "-d",
+              options.dangerFilePath,
+            )
+            .apply {
+              withWorkingDirectory(project.basePath?.toNioPathOrNull())
+              withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM)
+            }
 
-        val processHandler = ProcessHandlerFactory.getInstance()
-          .createColoredProcessHandler(commandLine)
+        val processHandler =
+          ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine)
         ProcessTerminatedListener.attach(processHandler)
         return processHandler
       }
@@ -111,9 +110,8 @@ class DangerRunSettingsEditor : SettingsEditor<DangerRunConfiguration>() {
       null,
       FileChooserDescriptorFactory.createSingleFileDescriptor(".df.kts"),
     )
-    panel = FormBuilder.createFormBuilder()
-      .addLabeledComponent("Dangerfile", dangerFilePathField)
-      .panel
+    panel =
+      FormBuilder.createFormBuilder().addLabeledComponent("Dangerfile", dangerFilePathField).panel
   }
 
   override fun resetEditorFrom(config: DangerRunConfiguration) {
@@ -127,5 +125,4 @@ class DangerRunSettingsEditor : SettingsEditor<DangerRunConfiguration>() {
   override fun createEditor(): JComponent {
     return panel
   }
-
 }

@@ -20,10 +20,11 @@ class DangerRunAction(private val dangerEntrypointElement: PsiElement) : AnActio
 
     // Create and add the run configuration
     val runManager = RunManager.getInstance(event.project!!)
-    val configuration = runManager.createConfiguration(
-      "Run ${dangerFile.fileName.name}",
-      DangerRunConfigurationType::class.java,
-    )
+    val configuration =
+      runManager.createConfiguration(
+        "Run ${dangerFile.fileName.name}",
+        DangerRunConfigurationType::class.java,
+      )
     runManager.addConfiguration(configuration)
 
     // Hydrate with the passed dangerfile
@@ -31,6 +32,9 @@ class DangerRunAction(private val dangerEntrypointElement: PsiElement) : AnActio
     dangerRunConfiguration.dangerFilePath = dangerFile.absolutePathString()
 
     // Execute
-    ProgramRunnerUtil.executeConfiguration(configuration, DefaultRunExecutor.getRunExecutorInstance())
+    ProgramRunnerUtil.executeConfiguration(
+      configuration,
+      DefaultRunExecutor.getRunExecutorInstance(),
+    )
   }
 }
