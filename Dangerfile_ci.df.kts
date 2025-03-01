@@ -6,7 +6,7 @@
 @file:DependsOn("org.apache.commons:commons-text:1.6")
 
 // Testing plugin
-// @file:DependsOn("danger-kotlin-sample-plugin-sample.jar")
+@file:DependsOn("danger-kotlin-sample-plugin-sample.jar")
 @file:OptIn(kotlin.time.ExperimentalTime::class)
 
 import kotlinx.coroutines.async
@@ -17,16 +17,16 @@ import org.apache.commons.text.WordUtils
 import systems.danger.kotlin.*
 import systems.danger.kotlin.models.danger.DangerDSL
 
-// import systems.danger.samples.plugin.SamplePlugin
+import systems.danger.samples.plugin.SamplePlugin
 
-// register plugin SamplePlugin
+register plugin SamplePlugin
 
 danger(args) {
   val allSourceFiles = git.modifiedFiles + git.createdFiles
   val changelogChanged = allSourceFiles.contains("CHANGELOG.md")
   val sourceChanges = allSourceFiles.firstOrNull { it.contains("src") }
 
-  //  SamplePlugin.myCustomCheck()
+  SamplePlugin.myCustomCheck()
 
   onGitHub {
     val isTrivial = pullRequest.title.contains("#trivial")
