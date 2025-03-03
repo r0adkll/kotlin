@@ -1,5 +1,6 @@
 # Idea
-.idea/
+/.idea/*
+!/.idea/icon.svg
 .intellijPlatform/
 *.iml
 *.iws

@@ -1,19 +1,27 @@
 [![Current
-Version](https://img.shields.io/badge/danger%20kotlin-v2.0.0-orange)](https://danger.systems/kotlin/)
+Version](https://img.shields.io/badge/r0adkll/danger%20kotlin-v2.0.1-orange)](https://danger.systems/kotlin/)
 [![Maven Central - SDK](https://img.shields.io/maven-central/v/systems.danger/danger-kotlin-sdk.svg?label=danger-kotlin-sdk)](https://search.maven.org/search?q=g:%22com.r0adkll%22%20AND%20a:%22danger-kotlin-sdk%22)
-[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 <p align="center">
-<img width=200 src="https://danger.systems/images/js/danger-js-ktln-logo-hero-cachable@2x.png" /></br>
+<img width=200 src=".idea/icon.svg" /></br>
 ⚠️ Stop saying "you forgot to …" in code review in Kotlin
 </p>
 
-# Fork
-This is a fork of the danger/kotlin library to make customizations and improvements to my own design.
+# 🚧 Project status 🚧
+This project is currently under construction. This was forked from [danger/kotlin](https://github.com/danger/kotlin) to undergo extensive project maintenance and changes that I felt too big to be upstreamed.
 
-# Project status
-The project is now on a stable version.
-Is possible to generate a working `danger-kotlin` instance from the code that is currently on this repo, or use it via GitHub actions or `brew`.
+---
+
+# Setup
+_TBD_
+
+# IntelliJ PLugin
+_TBD_
+
+# Github Actions / CI
+_TBD_
+
+<!--
 
 ### What it looks like today
 You can make a `Dangerfile.df.kts` in your root project that looks through PR metadata, it's fully typed.
@@ -52,31 +60,17 @@ danger(args) {
 
 #### macOS (ARM)
 ```sh
-brew install danger/tap/danger-kotlin
+brew install r0adkll/tap/danger-kotlin
 ```
 
 #### macOS (Intel)
 ```sh
-brew install danger/tap/danger-kotlin-intel
-```
-
-You need to have Xcode installed and not relying on command line tools.
-If you're seeing this error when running xcodebuild:
-
-```sh
-$ xcodebuild -version
-xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
-```
-
-You can fix it with:
-
-```sh
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+brew install r0adkll/tap/danger-kotlin-intel
 ```
 
 ### Linux
 ```sh
-bash <(curl -s https://raw.githubusercontent.com/danger/kotlin/master/scripts/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/r0adkll/danger-kotlin/master/scripts/install.sh)
 source ~/.bash_profile
 ```
 
@@ -122,33 +116,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Autocomplete and Syntax highlighting in IntelliJ IDEA or Android Studio
-You can activate the autocomplete following this additional steps:
-- Install danger on your local machine
-- Go to `Preferences -> Build, Execution, Deployment -> Compiler -> Kotlin Compiler` (`Preferences -> Kotlin Compiler` in Android Studio, Recent Android Studio versions will show this option when you close all project and open the Settings from the initial screen)
-- At the bottom you will find a section `Kotlin Scripting`
-- Complete the field `Script template classes` with  `systems.danger.kts.DangerFileScript`
-- Complete the field `Script templates classpath` with `/usr/local/lib/danger/danger-kotlin.jar`
-- Go to `Preferences -> Language & Frameworks -> Kotlin -> Kotlin Scripting`
-- Make sure the script template `DangerFileScript` is active and above the default `Kotlin Script`
-- Apply changes
-- If opening the `Dangerfile.df.kts` the autocomplete and syntax highlighting doesn't work, try to reboot your IDE or open the Dangerfile from your IDE as a single file.
+-->
 
-### Using external maven dependencies into your Dangerfile
-You can use any external dependency by adding the following lines at the top of your `Dangerfile.df.kts`
-```kotlin
-@file:Repository("https://repo.maven.apache.org")
-@file:DependsOn("groupId:artifactId:version")
-```
-
-### Commands
-
-- `danger-kotlin ci` - Use this on CI
-- `danger-kotlin pr https://github.com/Moya/Harvey/pull/23` - Use this to build your Dangerfile
-- `danger-kotlin local` - Use this to run danger against your local changes from master
+---
 
 # Authors
-`danger-kotlin` was developed by [@gianluz][] and [@f-meloni][]
+`danger-kotlin` was originally developed by [@gianluz][] and [@f-meloni][]
+and forked by [@r0adkll][]
 
 [@f-meloni]: https://github.com/f-meloni
 [@gianluz]: https://github.com/gianluz
+[@r0adkll]: https://github.com/r0adkll
