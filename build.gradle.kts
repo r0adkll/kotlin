@@ -6,6 +6,7 @@ import java.net.URI
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
+  alias(libs.plugins.buildConfig) apply false
   alias(libs.plugins.dokka)
   alias(libs.plugins.kotlinMultiplatform) apply false
   alias(libs.plugins.kotlinSerialization) apply false

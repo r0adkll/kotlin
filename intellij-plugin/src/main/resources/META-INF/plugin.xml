@@ -8,11 +8,18 @@
 
   <depends>com.intellij.modules.platform</depends>
   <depends>org.jetbrains.kotlin</depends>
+  <depends>org.jetbrains.plugins.github</depends>
 
   <resource-bundle>messages.DangerBundle</resource-bundle>
 
   <extensions defaultExtensionNs="com.intellij">
+    <configurationType implementation="com.r0adkll.danger.run.DangerRunConfigurationType" />
+
     <postStartupActivity implementation="com.r0adkll.danger.DangerProjectActivity"/>
+
+    <runLineMarkerContributor language="kotlin"
+                              implementationClass="com.r0adkll.danger.gutter.DangerRunLineMarkerContributor"
+                              />
   </extensions>
 
   <extensions defaultExtensionNs="org.jetbrains.kotlin">

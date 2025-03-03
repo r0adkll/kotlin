@@ -44,8 +44,10 @@ class DangerService(private val project: Project) {
 
     logger.info("Loading Danger for $pluginVersion")
 
-    // Configure the expected sourceJar path
-    val dangerKotlinJar = getDangerSourceJarPath(pluginVersion)
+    // First search for a system installed danger source jar and use it,
+    // if not default back to the local project installed jar.
+    // TODO: We should make this location configurable in a settings page
+    val dangerKotlinJar = getSystemDangerSourceJarPath() ?: getDangerSourceJarPath(pluginVersion)
     if (dangerKotlinJar.exists()) {
       logger.info("danger-kotlin.jar found!")
       dangerConfig = DangerConfig(dangerKotlinJar)
@@ -118,11 +120,30 @@ class DangerService(private val project: Project) {
     return getDangerSourceDirectory(version)?.resolve(DANGER_SOURCE_JAR_NAME)
       ?: error("Unable to resolve danger source jar file path")
   }
+
+  private fun getSystemDangerSourceJarPath(): Path? {
+    return platformExpectedLibLocations
+      .map { "$it/lib/danger/danger-kotlin.jar" }
+      .map { Path.of(it) }
+      .firstOrNull { path ->
+        path.exists().also {
+          if (it) logger.info("System danger-kotlin.jar found! ${path.absolutePathString()}")
+        }
+      }
+  }
 }
 
 private const val DANGER_PROJECT_DIR = ".danger"
 private const val DANGER_SOURCE_DIR = "dist"
 private const val DANGER_SOURCE_JAR_NAME = "danger-kotlin.jar"
+
+private val platformExpectedLibLocations =
+  setOf(
+    "/usr/local", // x86 location
+    "/opt/local", // Arm
+    "/opt/homebrew", // Homebrew Arm
+    "/usr", // Fallback
+  )
 
 data class DangerConfig(
   val classPath: Path,

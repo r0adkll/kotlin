@@ -8,7 +8,7 @@ LABEL "com.github.actions.icon"="zap"
 LABEL "com.github.actions.color"="red"
 
 ARG KOTLINC_VERSION="2.1.10"
-ARG DANGER_KOTLIN_VERSION="2.0.0"
+ARG DANGER_KOTLIN_VERSION="2.0.1"
 ARG DANGER_JS_VERSION="12.3.3"
 
 # Install dependencies

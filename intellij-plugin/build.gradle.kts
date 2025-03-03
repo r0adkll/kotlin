@@ -41,7 +41,7 @@ dependencies {
 
     // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file
     // for bundled IntelliJ Platform plugins.
-    bundledPlugins("org.jetbrains.kotlin", "com.intellij.java")
+    bundledPlugins("org.jetbrains.kotlin", "com.intellij.java", "org.jetbrains.plugins.github")
 
     pluginVerifier()
     zipSigner()

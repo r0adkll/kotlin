@@ -1,4 +1,12 @@
-plugins { kotlin("multiplatform") }
+plugins {
+  kotlin("multiplatform")
+  alias(libs.plugins.buildConfig)
+}
+
+buildConfig {
+  packageName("com.r0adkll.danger")
+  buildConfigField("String", "VERSION", "\"${providers.gradleProperty("VERSION_NAME").get()}\"")
+}
 
 kotlin {
   /* Targets configuration omitted.

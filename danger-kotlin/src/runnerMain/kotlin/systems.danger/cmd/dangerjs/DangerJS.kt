@@ -17,8 +17,15 @@ object DangerJS : DangerJSBridge {
         "$(which danger)"
       }
 
-    exec(dangerJSPath, verbose = true) {
-      arguments(command.argument, "--process", processName, "--passURLForDSL", *args.toTypedArray())
+    exec(dangerJSPath) {
+      arguments(
+        command.argument,
+        "--verbose",
+        "--process",
+        processName,
+        "--passURLForDSL",
+        *args.toTypedArray(),
+      )
     }
   }
 }

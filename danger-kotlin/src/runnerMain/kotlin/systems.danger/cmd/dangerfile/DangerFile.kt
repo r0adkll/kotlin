@@ -40,7 +40,7 @@ object DangerFile : DangerFileBridge {
 
     Log.info("Compiling Dangerfile $dangerfile", true)
 
-    exec("kotlinc", verbose = true) {
+    exec("kotlinc") {
       arguments(
         "-script-templates",
         "systems.danger.kts.DangerFileScript",
