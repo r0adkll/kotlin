@@ -117,7 +117,19 @@ class DangerRunSettingsEditor : SettingsEditor<DangerRunConfiguration>() {
   private val prUrlField: TextFieldWithStoredHistory = TextFieldWithStoredHistory("pullRequestUrl")
 
   init {
+    /*
+     * TODO: Remove this when version 243+ is the min supported
+     * ```
+     * dangerFilePathField.addBrowseFolderListener(
+     *   null,
+     *   FileChooserDescriptorFactory.createSingleFileDescriptor(".df.kts"),
+     * )
+     * ```
+     */
+    @Suppress("DEPRECATION", "removal")
     dangerFilePathField.addBrowseFolderListener(
+      null,
+      null,
       null,
       FileChooserDescriptorFactory.createSingleFileDescriptor(".df.kts"),
     )
