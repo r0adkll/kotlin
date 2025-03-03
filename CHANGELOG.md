@@ -11,7 +11,9 @@
 
 -->
 ## Unreleased
-- Added Run Configuration to IntelliJ Plugin so Dangerfiles can be ran directly in the IDE
+
+# 2.0.2
+- Added Run Configuration to IntelliJ Plugin so Dangerfiles can be run directly in the IDE
 
 # 2.0.1
 - Fixing how clikt parses arguments to prevent it from choking

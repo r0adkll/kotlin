@@ -1,4 +1,4 @@
-FROM ghcr.io/r0adkll/danger-kotlin:2.0.1
+FROM ghcr.io/r0adkll/danger-kotlin:2.0.2
 
 COPY entrypoint.sh /entrypoint.sh
 
