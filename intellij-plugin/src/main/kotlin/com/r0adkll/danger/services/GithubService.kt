@@ -5,6 +5,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import git4idea.GitBranch
+import git4idea.remote.hosting.GitHostingUrlUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException
@@ -13,6 +14,7 @@ import org.jetbrains.plugins.github.api.GithubApiRequestExecutor
 import org.jetbrains.plugins.github.api.GithubApiRequests
 import org.jetbrains.plugins.github.api.GithubServerPath
 import org.jetbrains.plugins.github.authentication.GHAccountsUtil
+import org.jetbrains.plugins.github.authentication.accounts.GithubAccount
 import org.jetbrains.plugins.github.util.GHCompatibilityUtil
 import org.jetbrains.plugins.github.util.GithubUrlUtil
 
@@ -27,9 +29,14 @@ class GithubService(private val project: Project) : CiProvider {
     withContext(Dispatchers.IO) { GHAccountsUtil.getSingleOrDefaultAccount(project) != null }
 
   override suspend fun findCurrentPullRequestUrl(): String? {
-    val ghAccount = GHAccountsUtil.getSingleOrDefaultAccount(project)
+    val ghAccount = getMatchingGithubAccount()
     if (ghAccount == null) {
       thisLogger().warn("No Github account found! Can't load PR information to Danger against.")
+
+      GHAccountsUtil.accounts.forEach { acct ->
+        thisLogger().info("Github Account: ${acct.name} --> ${acct.server.toUrl()}")
+      }
+
       return null
     }
 
@@ -43,25 +50,22 @@ class GithubService(private val project: Project) : CiProvider {
       return existing
     }
 
-    // TODO: How in TF are we suppose to parse the host from the URL, GithubServerPath.from()
-    // doesn't remove the path
-    @Suppress("removal") val host = GithubUrlUtil.getHostFromUrl(remoteUrl)
-
+    val host = getHostFromUrl(remoteUrl)
     val ghServerPath = GithubServerPath(host)
     val ghRepoPath = GithubUrlUtil.getUserAndRepositoryFromRemoteUrl(remoteUrl)
     val repoCoordinates =
       ghRepoPath?.let { GHRepositoryCoordinates(ghServerPath, it) } ?: return null
     thisLogger()
-      .warn(
+      .info(
         """
-      Repo Path Info:
-        remoteUrl = $remoteUrl,
-        serverPath = $ghServerPath,
-        serverPath.toUrl = ${ghServerPath.toUrl()},
-        serverPath.toApiUrl = ${ghServerPath.toApiUrl()},
-        repoPath = $ghRepoPath,
-        repoCoordinates = $repoCoordinates
-    """
+          Repo Path Info:
+            remoteUrl = $remoteUrl,
+            serverPath = $ghServerPath,
+            serverPath.toUrl = ${ghServerPath.toUrl()},
+            serverPath.toApiUrl = ${ghServerPath.toApiUrl()},
+            repoPath = $ghRepoPath,
+            repoCoordinates = $repoCoordinates
+        """
           .trimIndent()
       )
 
@@ -108,11 +112,32 @@ class GithubService(private val project: Project) : CiProvider {
 
   override suspend fun runEnvironment(): Map<String, String> =
     withContext(Dispatchers.IO) {
-      val ghAccount =
-        GHAccountsUtil.getSingleOrDefaultAccount(project) ?: return@withContext emptyMap()
+      val ghAccount = getMatchingGithubAccount() ?: return@withContext emptyMap()
       val token =
         GHCompatibilityUtil.getOrRequestToken(ghAccount, project) ?: return@withContext emptyMap()
 
       mapOf("DANGER_GITHUB_API_TOKEN" to token, "CI_PROVIDER" to "Github")
     }
+
+  /** Find the matching [GithubAccount] for the current tracked branch */
+  private suspend fun getMatchingGithubAccount(): GithubAccount? {
+    val repo = project.gitService().currentGitRepository() ?: return null
+    val remoteUrl = repo.remotes.firstOrNull()?.firstUrl ?: return null
+
+    val host = getHostFromUrl(remoteUrl)
+    val ghServerPath = GithubServerPath(host)
+
+    return GHAccountsUtil.accounts.find { acct -> acct.server.host == ghServerPath.host }
+  }
+
+  /** E.g.: https://github.com/suffix/ -> github.com github.com:8080/ -> github.com */
+  private fun getHostFromUrl(url: String): String {
+    val path: String = GitHostingUrlUtil.removeProtocolPrefix(url).replace(':', '/')
+    val index = path.indexOf('/')
+    return if (index == -1) {
+      path
+    } else {
+      path.substring(0, index)
+    }
+  }
 }

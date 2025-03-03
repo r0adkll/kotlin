@@ -14,10 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: sdkman/sdkman-action@master
-        with:
-          candidate: gradle
-          version: 8.10.2
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Install Kotlin
         run: |
