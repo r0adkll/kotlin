@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added 'Run' gutter action in *.df.kts files that will run the Dangerfile directly in the IDE
+* Added integration with GitHub / Git4Idea plugins to automatically configure run actions.
+
 ## [2.0.1]
 
 ### Changed
