@@ -1,5 +1,5 @@
 [![Current
-Version](https://img.shields.io/badge/r0adkll/danger%20kotlin-v2.0.1-orange)](https://danger.systems/kotlin/)
+Version](https://img.shields.io/badge/r0adkll/danger%20kotlin-v2.0.2-orange)](https://danger.systems/kotlin/)
 [![Maven Central - SDK](https://img.shields.io/maven-central/v/systems.danger/danger-kotlin-sdk.svg?label=danger-kotlin-sdk)](https://search.maven.org/search?q=g:%22com.r0adkll%22%20AND%20a:%22danger-kotlin-sdk%22)
 
 <p align="center">

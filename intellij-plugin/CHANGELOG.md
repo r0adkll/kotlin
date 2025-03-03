@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [2.0.2]
+
 ### Added
 
 * Added 'Run' gutter action in *.df.kts files that will run the Dangerfile directly in the IDE
