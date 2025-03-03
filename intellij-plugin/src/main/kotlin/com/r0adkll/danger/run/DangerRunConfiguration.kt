@@ -6,24 +6,28 @@ import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessHandlerFactory
 import com.intellij.execution.process.ProcessTerminatedListener
 import com.intellij.execution.runners.ExecutionEnvironment
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.BaseState
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.util.NotNullLazyValue
-import com.intellij.openapi.util.io.toNioPathOrNull
+import com.intellij.ui.EnumComboBoxModel
+import com.intellij.ui.TextFieldWithStoredHistory
 import com.intellij.util.ui.FormBuilder
+import com.r0adkll.danger.CommandOption
+import com.r0adkll.danger.DangerBundle
+import com.r0adkll.danger.DangerIcons
 import javax.swing.JComponent
 import javax.swing.JPanel
 
 class DangerRunConfigurationType :
   ConfigurationTypeBase(
     id = ID,
-    displayName = "Danger Run",
-    description = "Run a Dangerfile.df.kts",
-    icon = NotNullLazyValue.createValue { AllIcons.Nodes.Console },
+    displayName = DangerBundle.message("run.configuration.displayName"),
+    description = DangerBundle.message("run.configuration.description"),
+    icon = NotNullLazyValue.createValue { DangerIcons.DangerKotlin },
   ) {
   init {
     addFactory(DangerKotlinRunConfigurationFactory(this))
@@ -39,7 +43,11 @@ class DangerKotlinRunConfigurationFactory(type: ConfigurationType) : Configurati
   override fun getId(): String = DangerRunConfigurationType.ID
 
   override fun createTemplateConfiguration(project: Project): RunConfiguration {
-    return DangerRunConfiguration(project, this, "Run Danger")
+    return DangerRunConfiguration(
+      project,
+      this,
+      DangerBundle.message("run.configuration.displayName"),
+    )
   }
 
   override fun getOptionsClass(): Class<out BaseState> = DangerRunConfigurationOptions::class.java
@@ -47,45 +55,44 @@ class DangerKotlinRunConfigurationFactory(type: ConfigurationType) : Configurati
 
 class DangerRunConfigurationOptions : RunConfigurationOptions() {
 
-  private val _dangerFilePath = string(null).provideDelegate(this, "dangerFileName")
-
-  var dangerFilePath: String?
-    get() = _dangerFilePath.getValue(this)
-    set(value) {
-      _dangerFilePath.setValue(this, value)
-    }
+  var dangerFilePath: String? by string(null).provideDelegate(this, ::dangerFilePath)
+  var command: CommandOption by
+    enum<CommandOption>(CommandOption.LOCAL).provideDelegate(this, ::command)
+  var prUrl: String? by string(null).provideDelegate(this, ::prUrl)
+  var baseBranch: String? by string(null).provideDelegate(this, ::baseBranch)
+  var stagedOnly: Boolean by property(false).provideDelegate(this, ::stagedOnly)
 }
 
 class DangerRunConfiguration(project: Project, factory: ConfigurationFactory?, name: String?) :
   RunConfigurationBase<DangerRunConfigurationOptions>(project, factory, name) {
 
-  var dangerFilePath: String?
-    get() = options.dangerFilePath
-    set(value) {
-      options.dangerFilePath = value
-    }
+  // Proxy this since this class doesn't let us expose it directly
+  val dangerOptions: DangerRunConfigurationOptions
+    get() = options
+
+  fun applyOptions(block: (DangerRunConfigurationOptions) -> Unit): DangerRunConfiguration {
+    block(options)
+    return this
+  }
 
   override fun getOptions(): DangerRunConfigurationOptions {
     return super.getOptions() as DangerRunConfigurationOptions
   }
 
-  override fun getState(executor: Executor, env: ExecutionEnvironment): RunProfileState? {
+  override fun getState(executor: Executor, env: ExecutionEnvironment): RunProfileState {
     return object : CommandLineState(env) {
 
       override fun startProcess(): ProcessHandler {
         val commandLine =
-          GeneralCommandLine(
-              "danger-kotlin",
-              "local",
-              "--base",
-              "main",
-              "-d",
-              options.dangerFilePath,
+          project
+            .dangerCommandLineBuilder()
+            .build(
+              command = options.command,
+              prUrl = options.prUrl,
+              baseBranch = options.baseBranch,
+              stagedOnly = options.stagedOnly,
+              dangerFilePath = requireNotNull(options.dangerFilePath),
             )
-            .apply {
-              withWorkingDirectory(project.basePath?.toNioPathOrNull())
-              withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.SYSTEM)
-            }
 
         val processHandler =
           ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine)
@@ -100,26 +107,49 @@ class DangerRunConfiguration(project: Project, factory: ConfigurationFactory?, n
   }
 }
 
+// TODO: Add additional options to this editor
 class DangerRunSettingsEditor : SettingsEditor<DangerRunConfiguration>() {
 
   private val panel: JPanel
   private val dangerFilePathField: TextFieldWithBrowseButton = TextFieldWithBrowseButton()
+  private val commandDropdownField: ComboBox<CommandOption> =
+    ComboBox(EnumComboBoxModel(CommandOption::class.java))
+  private val prUrlField: TextFieldWithStoredHistory = TextFieldWithStoredHistory("pullRequestUrl")
 
   init {
     dangerFilePathField.addBrowseFolderListener(
       null,
       FileChooserDescriptorFactory.createSingleFileDescriptor(".df.kts"),
     )
+
+    // TODO: Figure out how to dynamic show/enable these fields based on the command option
     panel =
-      FormBuilder.createFormBuilder().addLabeledComponent("Dangerfile", dangerFilePathField).panel
+      FormBuilder.createFormBuilder()
+        .addLabeledComponent(
+          DangerBundle.message("run.configuration.settings.dangerfile"),
+          dangerFilePathField,
+        )
+        .addLabeledComponent(
+          DangerBundle.message("run.configuration.settings.command"),
+          commandDropdownField,
+        )
+        .addLabeledComponent(
+          DangerBundle.message("run.configuration.settings.pullRequestUrl"),
+          prUrlField,
+        )
+        .panel
   }
 
   override fun resetEditorFrom(config: DangerRunConfiguration) {
-    dangerFilePathField.setText(config.dangerFilePath)
+    dangerFilePathField.setText(config.dangerOptions.dangerFilePath)
+    commandDropdownField.item = config.dangerOptions.command
+    prUrlField.text = config.dangerOptions.prUrl
   }
 
   override fun applyEditorTo(config: DangerRunConfiguration) {
-    config.dangerFilePath = dangerFilePathField.text
+    config.dangerOptions.dangerFilePath = dangerFilePathField.text
+    config.dangerOptions.command = commandDropdownField.item
+    config.dangerOptions.prUrl = prUrlField.text
   }
 
   override fun createEditor(): JComponent {

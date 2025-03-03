@@ -4,7 +4,8 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.r0adkll.danger:danger-plugin-installer:${VERSION_NAME}"
+        // TODO: Figure out how to pass VERSION_NAME property to this
+        classpath "com.r0adkll.danger:danger-plugin-installer:2.0.1"
     }
 }
 
