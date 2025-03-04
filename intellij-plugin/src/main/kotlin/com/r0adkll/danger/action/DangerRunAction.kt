@@ -60,8 +60,6 @@ class DangerRunAction(
     runManager.addConfiguration(configuration)
 
     // Pass the configuration on to it.
-    // TODO: Add ability to detect when no command is passed, so the user
-    //  is prompted to edit a new config.
     (configuration.configuration as DangerRunConfiguration).applyOptions { options ->
       options.dangerFilePath = dangerFile.absolutePathString()
       options.command = command.option
@@ -69,6 +67,7 @@ class DangerRunAction(
         options.prUrl = command.url
       }
       if (command is Command.Local) {
+        // TODO: Need to test this more
         //options.stagedOnly = command.useStagedChanges
         options.baseBranch = command.base
       }

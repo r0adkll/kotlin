@@ -58,7 +58,7 @@ class GithubService(private val project: Project) : CiProvider {
       ghRepoPath?.let { GHRepositoryCoordinates(ghServerPath, it) } ?: return null
 
     thisLogger()
-      .warn(
+      .info(
         """
           Repo Path Info:
             remoteUrl = $remoteUrl,
@@ -88,19 +88,13 @@ class GithubService(private val project: Project) : CiProvider {
     val apiExecutor = GithubApiRequestExecutor.Factory.getInstance().create(ghServerPath, token)
 
     thisLogger()
-      .warn(
+      .info(
         "Searching pull request @ ${request.url}, for ${trackedBranch.nameForRemoteOperations}"
       )
 
     return withContext(Dispatchers.IO) {
       try {
         val response = apiExecutor.execute(request)
-
-        response.items.forEach { pr ->
-          this@GithubService.thisLogger()
-            .warn("PR Result: ${pr.id}, ${pr.number}, ${pr.nodeId}")
-        }
-
         val pullRequestId = response.items.firstOrNull()?.number
         if (pullRequestId != null) {
           // attempt to construct the PR url from the found number, the Github plugin keeps the API

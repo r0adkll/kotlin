@@ -40,8 +40,6 @@ class CreateDangerRunAction(private val dangerEntrypointElement: PsiElement) : A
     configuration.isEditBeforeRun = true
 
     // Pass the configuration on to it.
-    // TODO: Add ability to detect when no command is passed, so the user
-    //  is prompted to edit a new config.
     (configuration.configuration as DangerRunConfiguration).applyOptions { options ->
       options.dangerFilePath = dangerFile.absolutePathString()
     }
