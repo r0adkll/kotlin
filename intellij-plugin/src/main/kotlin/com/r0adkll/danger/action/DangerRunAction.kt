@@ -38,6 +38,7 @@ class DangerRunAction(
           description = DangerBundle.message("run.action.local.description")
           icon = AllIcons.Actions.Diff
         }
+
         is Command.PR -> {
           text = DangerBundle.message("run.action.pr.text", command.url)
           description = DangerBundle.message("run.action.pr.description")
@@ -54,7 +55,11 @@ class DangerRunAction(
     val runManager = RunManager.getInstance(event.project!!)
     val configuration =
       runManager.createConfiguration(
-        DangerBundle.message("run.action.configuration.name", dangerFile.fileName.name),
+        DangerBundle.message(
+          "run.action.configuration.name",
+          dangerFile.fileName.name,
+          command.option.name.uppercase(),
+        ),
         DangerRunConfigurationType::class.java,
       )
     runManager.addConfiguration(configuration)
