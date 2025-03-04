@@ -69,7 +69,8 @@ class DangerRunAction(
         options.prUrl = command.url
       }
       if (command is Command.Local) {
-        options.stagedOnly = command.useStagedChanges
+        //options.stagedOnly = command.useStagedChanges
+        options.baseBranch = command.base
       }
     }
 

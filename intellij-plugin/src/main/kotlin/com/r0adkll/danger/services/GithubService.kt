@@ -13,6 +13,7 @@ import org.jetbrains.plugins.github.api.GHRepositoryCoordinates
 import org.jetbrains.plugins.github.api.GithubApiRequestExecutor
 import org.jetbrains.plugins.github.api.GithubApiRequests
 import org.jetbrains.plugins.github.api.GithubServerPath
+import org.jetbrains.plugins.github.api.data.GithubIssueState
 import org.jetbrains.plugins.github.authentication.GHAccountsUtil
 import org.jetbrains.plugins.github.authentication.accounts.GithubAccount
 import org.jetbrains.plugins.github.util.GHCompatibilityUtil
@@ -55,8 +56,9 @@ class GithubService(private val project: Project) : CiProvider {
     val ghRepoPath = GithubUrlUtil.getUserAndRepositoryFromRemoteUrl(remoteUrl)
     val repoCoordinates =
       ghRepoPath?.let { GHRepositoryCoordinates(ghServerPath, it) } ?: return null
+
     thisLogger()
-      .info(
+      .warn(
         """
           Repo Path Info:
             remoteUrl = $remoteUrl,
@@ -65,6 +67,7 @@ class GithubService(private val project: Project) : CiProvider {
             serverPath.toApiUrl = ${ghServerPath.toApiUrl()},
             repoPath = $ghRepoPath,
             repoCoordinates = $repoCoordinates
+            headRef = ${trackedBranch.nameForRemoteOperations},
         """
           .trimIndent()
       )
@@ -72,7 +75,8 @@ class GithubService(private val project: Project) : CiProvider {
     val request =
       GithubApiRequests.Repos.PullRequests.find(
         repository = repoCoordinates,
-        headRef = trackedBranch.nameForRemoteOperations,
+        state = GithubIssueState.open,
+        headRef = "${repoCoordinates.repositoryPath.owner}:${trackedBranch.nameForRemoteOperations}",
       )
 
     val token = GHCompatibilityUtil.getOrRequestToken(ghAccount, project)
@@ -84,13 +88,19 @@ class GithubService(private val project: Project) : CiProvider {
     val apiExecutor = GithubApiRequestExecutor.Factory.getInstance().create(ghServerPath, token)
 
     thisLogger()
-      .debug(
-        "Searching pull request @ ${repoCoordinates.toUrl()}, for ${trackedBranch.nameForRemoteOperations}"
+      .warn(
+        "Searching pull request @ ${request.url}, for ${trackedBranch.nameForRemoteOperations}"
       )
 
     return withContext(Dispatchers.IO) {
       try {
         val response = apiExecutor.execute(request)
+
+        response.items.forEach { pr ->
+          this@GithubService.thisLogger()
+            .warn("PR Result: ${pr.id}, ${pr.number}, ${pr.nodeId}")
+        }
+
         val pullRequestId = response.items.firstOrNull()?.number
         if (pullRequestId != null) {
           // attempt to construct the PR url from the found number, the Github plugin keeps the API
@@ -116,7 +126,12 @@ class GithubService(private val project: Project) : CiProvider {
       val token =
         GHCompatibilityUtil.getOrRequestToken(ghAccount, project) ?: return@withContext emptyMap()
 
-      mapOf("DANGER_GITHUB_API_TOKEN" to token, "CI_PROVIDER" to "Github")
+      mapOf(
+        "DANGER_GITHUB_API_TOKEN" to token,
+        "DANGER_GITHUB_HOST" to ghAccount.server.toUrl(),
+        "DANGER_GITHUB_API_BASE_URL" to ghAccount.server.toApiUrl(),
+        "CI_PROVIDER" to "Github"
+      )
     }
 
   /** Find the matching [GithubAccount] for the current tracked branch */
