@@ -15,9 +15,10 @@ ktfmt = "0.54"
 ktor = "3.1.0"
 mavenPublish = "0.30.0"
 okio = "1.16.0"
-mockk = "1.10.0"
+mockk = "1.13.17"
 shadow = "9.0.0-beta9"
 spotless = "6.25.0"
+strikt = "0.34.0"
 
 [plugins]
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
@@ -46,7 +47,8 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+strikt = { module = "io.strikt:strikt-core", version.ref = "strikt" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [bundles]
-testing = [ "junit", "mockk" ]
+testing = [ "junit", "mockk", "strikt" ]
