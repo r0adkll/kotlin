@@ -68,7 +68,7 @@ class DangerRunAction(
       }
       if (command is Command.Local) {
         // TODO: Need to test this more
-        //options.stagedOnly = command.useStagedChanges
+        // options.stagedOnly = command.useStagedChanges
         options.baseBranch = command.base
       }
     }

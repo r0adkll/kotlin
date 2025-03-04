@@ -88,9 +88,7 @@ class GithubService(private val project: Project) : CiProvider {
     val apiExecutor = GithubApiRequestExecutor.Factory.getInstance().create(ghServerPath, token)
 
     thisLogger()
-      .info(
-        "Searching pull request @ ${request.url}, for ${trackedBranch.nameForRemoteOperations}"
-      )
+      .info("Searching pull request @ ${request.url}, for ${trackedBranch.nameForRemoteOperations}")
 
     return withContext(Dispatchers.IO) {
       try {
@@ -124,7 +122,7 @@ class GithubService(private val project: Project) : CiProvider {
         "DANGER_GITHUB_API_TOKEN" to token,
         "DANGER_GITHUB_HOST" to ghAccount.server.toUrl(),
         "DANGER_GITHUB_API_BASE_URL" to ghAccount.server.toApiUrl(),
-        "CI_PROVIDER" to "Github"
+        "CI_PROVIDER" to "Github",
       )
     }
 
