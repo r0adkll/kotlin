@@ -31,30 +31,32 @@ import org.jetbrains.kotlin.mainKts.*
 abstract class DangerFileScript(val args: Array<String>)
 
 object DangerFileScriptDefinition :
-  ScriptCompilationConfiguration({
-    defaultImports(
-      DependsOn::class,
-      Repository::class,
-      Import::class,
-      CompilerOptions::class,
-      ScriptFileLocation::class,
-    )
-    jvm { dependenciesFromClassContext(DangerFileScriptDefinition::class, "danger-kotlin") }
-    refineConfiguration {
-      onAnnotations(
+  ScriptCompilationConfiguration(
+    {
+      defaultImports(
         DependsOn::class,
         Repository::class,
         Import::class,
         CompilerOptions::class,
-        handler = DangerFileKtsConfigurator(),
+        ScriptFileLocation::class,
       )
-      onAnnotations(ScriptFileLocation::class, handler = ScriptFileLocationCustomConfigurator())
-      beforeCompiling(::configureScriptFileLocationPathVariablesForCompilation)
-      beforeCompiling(::configureProvidedPropertiesFromJsr223Context)
-    }
-    ide { acceptedLocations(ScriptAcceptedLocation.Everywhere) }
-    jsr223 { importAllBindings(true) }
-  })
+      jvm { dependenciesFromClassContext(DangerFileScriptDefinition::class, "danger-kotlin") }
+      refineConfiguration {
+        onAnnotations(
+          DependsOn::class,
+          Repository::class,
+          Import::class,
+          CompilerOptions::class,
+          handler = DangerFileKtsConfigurator(),
+        )
+        onAnnotations(ScriptFileLocation::class, handler = ScriptFileLocationCustomConfigurator())
+        beforeCompiling(::configureScriptFileLocationPathVariablesForCompilation)
+        beforeCompiling(::configureProvidedPropertiesFromJsr223Context)
+      }
+      ide { acceptedLocations(ScriptAcceptedLocation.Everywhere) }
+      jsr223 { importAllBindings(true) }
+    },
+  )
 
 class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
   private val externalDependenciesResolvers = setOf(MavenDependenciesResolver())
@@ -68,11 +70,11 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
   private val resolver = CompoundDependenciesResolver(resolvers)
 
   override operator fun invoke(
-    context: ScriptConfigurationRefinementContext
+    context: ScriptConfigurationRefinementContext,
   ): ResultWithDiagnostics<ScriptCompilationConfiguration> = processAnnotations(context)
 
   fun processAnnotations(
-    context: ScriptConfigurationRefinementContext
+    context: ScriptConfigurationRefinementContext,
   ): ResultWithDiagnostics<ScriptCompilationConfiguration> {
     val diagnostics = arrayListOf<ScriptDiagnostic>()
 
@@ -88,7 +90,7 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
           mapLegacyDiagnosticSeverity(severity),
           context.script.locationId,
           mapLegacyScriptPosition(position),
-        )
+        ),
       )
     }
 
@@ -112,7 +114,7 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
               "Duplicate imports: \"${prevImport.second}\" and \"$sourceName\"",
               sourcePath = context.script.locationId,
               location = scriptAnnotation.location?.locationInText,
-            )
+            ),
           )
           hasImportErrors = true
         }
@@ -130,7 +132,7 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
         @Suppress("DEPRECATION_ERROR")
         internalScriptingRunSuspend {
           resolver.resolveFromScriptSourceAnnotations(
-            annotations.filter { it.annotation is DependsOn || it.annotation is Repository }
+            annotations.filter { it.annotation is DependsOn || it.annotation is Repository },
           )
         }
       } catch (e: Throwable) {
@@ -140,11 +142,14 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
 
     return resolveResult.onSuccess { resolvedClassPath ->
       ScriptCompilationConfiguration(context.compilationConfiguration) {
-          updateClasspath(resolvedClassPath)
-          if (importedSources.isNotEmpty())
-            importScripts.append(importedSources.values.map { FileScriptSource(it.first) })
-          if (compileOptions.isNotEmpty()) compilerOptions.append(compileOptions)
+        updateClasspath(resolvedClassPath)
+        if (importedSources.isNotEmpty()) {
+          importScripts.append(importedSources.values.map { FileScriptSource(it.first) })
         }
+        if (compileOptions.isNotEmpty()) {
+          compilerOptions.append(compileOptions)
+        }
+      }
         .asSuccess()
     }
   }
@@ -152,11 +157,11 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
   private companion object {
     val DANGER_DEFAULT_FLAT_DIRS =
       setOf(
-          "/usr/local", // x86 location
-          "/opt/local", // Arm
-          "/opt/homebrew", // Homebrew Arm
-          "/usr", // Fallback
-        )
+        "/usr/local", // x86 location
+        "/opt/local", // Arm
+        "/opt/homebrew", // Homebrew Arm
+        "/usr", // Fallback
+      )
         .map { "$it/lib/danger/libs" }
   }
 }
