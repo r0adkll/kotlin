@@ -141,9 +141,12 @@ class DangerFileKtsConfigurator : RefineScriptCompilationConfigurationHandler {
     return resolveResult.onSuccess { resolvedClassPath ->
       ScriptCompilationConfiguration(context.compilationConfiguration) {
           updateClasspath(resolvedClassPath)
-          if (importedSources.isNotEmpty())
+          if (importedSources.isNotEmpty()) {
             importScripts.append(importedSources.values.map { FileScriptSource(it.first) })
-          if (compileOptions.isNotEmpty()) compilerOptions.append(compileOptions)
+          }
+          if (compileOptions.isNotEmpty()) {
+            compilerOptions.append(compileOptions)
+          }
         }
         .asSuccess()
     }
