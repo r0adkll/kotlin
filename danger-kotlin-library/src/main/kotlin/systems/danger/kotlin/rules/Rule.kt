@@ -5,7 +5,7 @@ import systems.danger.kotlin.models.danger.DangerDSL
 class Rule(
   val id: String,
   val dependsOn: List<String>,
-  val run: DangerDSL.() -> RuleResult,
+  val run: suspend DangerDSL.() -> RuleResult,
 ) {
 
   override fun equals(other: Any?): Boolean {
@@ -27,7 +27,7 @@ class Rule(
  * of rules with early exists. For example, if the PR was made by a bot you may not want to evaluate the
  * remaining rules in your chain.
  */
-fun rule(id: String, vararg dependsOn: String, block: DangerDSL.() -> RuleResult) {
+fun rule(id: String, vararg dependsOn: String, block: suspend DangerDSL.() -> RuleResult) {
   val newRule = Rule(id, dependsOn.toList(), block)
   RuleManager.register(newRule)
 }
