@@ -25,8 +25,7 @@ class RuleGraphTest {
     graph.forEach(nodeTraveler)
 
     // then
-    expectThat(nodeTraveler.visited)
-      .containsExactly(Root.ruleId, "0", "1", "2")
+    expectThat(nodeTraveler.visited).containsExactly(Root.ruleId, "0", "1", "2")
   }
 
   @Test
@@ -41,8 +40,7 @@ class RuleGraphTest {
     graph.forEach(nodeTraveler)
 
     // then
-    expectThat(nodeTraveler.visited)
-      .containsExactly(Root.ruleId, "0", "3", "2", "1")
+    expectThat(nodeTraveler.visited).containsExactly(Root.ruleId, "0", "3", "2", "1")
   }
 
   @Test
@@ -61,13 +59,11 @@ class RuleGraphTest {
       .get { println(this) }
   }
 
-  private fun createRule(
-    id: String,
-    vararg dependsOn: String,
-  ) = Rule(id, dependsOn.toList(), { RuleResult.Continue })
+  private fun createRule(id: String, vararg dependsOn: String) =
+    Rule(id, dependsOn.toList()) { RuleResult.Continue }
 }
 
-class NodeTraveler : (RuleGraph.Vertex) -> Unit {
+internal class NodeTraveler : (RuleGraph.Vertex) -> Unit {
 
   val visited = mutableListOf<String>()
 

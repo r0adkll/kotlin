@@ -2,7 +2,7 @@ package systems.danger.kotlin.rules
 
 import systems.danger.kotlin.rules.RuleGraph.Edge
 
-class RuleGraph : Iterable<RuleGraph.Vertex> {
+internal class RuleGraph : Iterable<RuleGraph.Vertex> {
 
   @JvmInline
   value class Vertex(val ruleId: String) {
@@ -11,10 +11,7 @@ class RuleGraph : Iterable<RuleGraph.Vertex> {
     }
   }
 
-  data class Edge(
-    val src: Vertex,
-    val dest: Vertex,
-  )
+  data class Edge(val src: Vertex, val dest: Vertex)
 
   private val vertexMap = mutableMapOf<Vertex, MutableList<Edge>>()
 
@@ -55,8 +52,8 @@ class RuleGraph : Iterable<RuleGraph.Vertex> {
   }
 
   /**
-   * Traverse this graph using a topological sorting algorithm to make sure we visit
-   * the nodes in correct order per their dependency setup.
+   * Traverse this graph using a topological sorting algorithm to make sure we visit the nodes in
+   * correct order per their dependency setup.
    *
    * [Kahn's algorithm](https://en.wikipedia.org/wiki/Topological_sorting#Algorithms)
    */
@@ -99,34 +96,35 @@ class RuleGraph : Iterable<RuleGraph.Vertex> {
   }
 }
 
-data class CircularDependencyException(
+internal data class CircularDependencyException(
   val remainingEdges: Map<RuleGraph.Vertex, MutableList<Edge>>
-) : RuntimeException(buildString {
-  appendLine("This graph has a circular dependency:")
-  appendLine()
+) :
+  RuntimeException(
+    buildString {
+      appendLine("This graph has a circular dependency:")
+      appendLine()
 
-  val edges = remainingEdges.flatMap { it.value }
-  val edgeMap = edges.associateBy { it.src }.toMutableMap()
+      val edges = remainingEdges.flatMap { it.value }
+      val edgeMap = edges.associateBy { it.src }.toMutableMap()
 
-  val edgeChain = mutableListOf<RuleGraph.Vertex>()
-  val edgeQueue = ArrayDeque<Edge>()
-  val firstEdge = edges.first()
-  edgeQueue.addLast(firstEdge)
-  edgeMap.remove(firstEdge.src)
-  edgeChain.add(firstEdge.src)
+      val edgeChain = mutableListOf<RuleGraph.Vertex>()
+      val edgeQueue = ArrayDeque<Edge>()
+      val firstEdge = edges.first()
+      edgeQueue.addLast(firstEdge)
+      edgeMap.remove(firstEdge.src)
+      edgeChain.add(firstEdge.src)
 
-  while (edgeQueue.isNotEmpty()) {
-    val edge = edgeQueue.removeFirst()
-    edgeChain.add(edge.dest)
+      while (edgeQueue.isNotEmpty()) {
+        val edge = edgeQueue.removeFirst()
+        edgeChain.add(edge.dest)
 
-    val nextEdge = edgeMap[edge.dest]
-    if (nextEdge != null) {
-      edgeMap.remove(edge.dest)
-      edgeQueue.addLast(nextEdge)
+        val nextEdge = edgeMap[edge.dest]
+        if (nextEdge != null) {
+          edgeMap.remove(edge.dest)
+          edgeQueue.addLast(nextEdge)
+        }
+      }
+
+      append("\t").appendLine(edgeChain.joinToString(" --> ") { it.ruleId })
     }
-  }
-
-  append("\t").appendLine(
-    edgeChain.joinToString(" --> ") { it.ruleId }
   )
-})
